@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Star Academy — Nos pronostics</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ============================= -->
+  <!-- EN-TÊTE -->
+  <!-- ============================= -->
+
+  <header class="header">
+
+    <div class="logo">
+      <span>STAR</span>
+      <strong>ACADEMY</strong>
+    </div>
+
+    <button class="menu-button" id="menuButton">
+      ☰
+    </button>
+
+    <nav id="nav">
+      <a href="#accueil">Accueil</a>
+      <a href="#primes">Les Primes</a>
+      <a href="#classement">Classement</a>
+    </nav>
+
+  </header>
+
+
+  <!-- ============================= -->
+  <!-- ACCUEIL -->
+  <!-- ============================= -->
+
+  <main>
+
+    <section id="accueil" class="hero">
+
+      <div class="hero-content">
+
+        <p class="small-title">
+          SAISON 2026
+        </p>
+
+        <h1>
+          Nos pronostics<br>
+          <span>Star Academy</span>
+        </h1>
+
+        <p class="hero-text">
+          Chaque Prime, chacune fait ses pronostics.
+          Les points sont ensuite comptabilisés pour établir
+          notre classement.
+        </p>
+
+        <a href="#primes" class="main-button">
+          Commencer les pronostics
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- JOUEUSE -->
+    <!-- ============================= -->
+
+    <section class="player-section">
+
+      <div class="section-title">
+        <p>QUI ES-TU ?</p>
+        <h2>Choisis ton profil</h2>
+      </div>
+
+      <div class="players" id="players">
+
+        <button class="player-card" data-player="Joueuse 1">
+          <span class="player-number">01</span>
+          <span>Joueuse 1</span>
+        </button>
+
+        <button class="player-card" data-player="Joueuse 2">
+          <span class="player-number">02</span>
+          <span>Joueuse 2</span>
+        </button>
+
+        <button class="player-card" data-player="Joueuse 3">
+          <span class="player-number">03</span>
+          <span>Joueuse 3</span>
+        </button>
+
+        <button class="player-card" data-player="Joueuse 4">
+          <span class="player-number">04</span>
+          <span>Joueuse 4</span>
+        </button>
+
+      </div>
+
+      <p id="selectedPlayer" class="selected-player">
+        Aucune joueuse sélectionnée
+      </p>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- PRIMES -->
+    <!-- ============================= -->
+
+    <section id="primes" class="primes-section">
+
+      <div class="section-title">
+
+        <p>STAR ACADEMY</p>
+
+        <h2>Les Primes</h2>
+
+        <span>
+          Choisis un Prime pour enregistrer tes pronostics.
+        </span>
+
+      </div>
+
+
+      <div class="prime-grid" id="primeGrid">
+
+        <!-- Les Primes sont créés automatiquement par JavaScript -->
+
+      </div>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- PRONOSTICS -->
+    <!-- ============================= -->
+
+    <section id="pronostics" class="prediction-section hidden">
+
+      <div class="prediction-header">
+
+        <button id="backToPrimes" class="back-button">
+          ← Retour aux Primes
+        </button>
+
+        <p id="primeNumber"></p>
+
+        <h2 id="primeTitle">
+          Prime
+        </h2>
+
+        <p id="playerName"></p>
+
+      </div>
+
+
+      <form id="predictionForm">
+
+        <div class="prediction-card">
+
+          <h3>
+            ⭐ Qui sera immunisé(e) ?
+          </h3>
+
+          <select id="immunity">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <div class="prediction-card">
+
+          <h3>
+            🎤 Qui aura le meilleur duo ?
+          </h3>
+
+          <select id="bestDuo">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <div class="prediction-card">
+
+          <h3>
+            💫 Qui fera la meilleure prestation ?
+          </h3>
+
+          <select id="bestPerformance">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <div class="prediction-card">
+
+          <h3>
+            ❤️ Ton élève préféré(e) de la semaine
+          </h3>
+
+          <select id="favorite">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <div class="prediction-card">
+
+          <h3>
+            🚪 Qui sera éliminé(e) ?
+          </h3>
+
+          <select id="eliminated">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <div class="prediction-card">
+
+          <h3>
+            🏆 Qui gagnera le Prime ?
+          </h3>
+
+          <select id="winner">
+            <option value="">Choisir...</option>
+          </select>
+
+        </div>
+
+
+        <button type="submit" class="save-button">
+          Enregistrer mes pronostics
+        </button>
+
+        <p id="saveMessage" class="save-message"></p>
+
+      </form>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- CLASSEMENT -->
+    <!-- ============================= -->
+
+    <section id="classement" class="ranking-section">
+
+      <div class="section-title">
+
+        <p>QUI VA GAGNER ?</p>
+
+        <h2>Le classement</h2>
+
+        <span>
+          Les points seront mis à jour après chaque Prime.
+        </span>
+
+      </div>
+
+
+      <div id="ranking" class="ranking">
+
+        <div class="ranking-empty">
+          Les scores apparaîtront ici.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- RÉSULTATS -->
+    <!-- ============================= -->
+
+    <section class="results-section">
+
+      <div class="section-title">
+
+        <p>HISTORIQUE</p>
+
+        <h2>Mes résultats</h2>
+
+      </div>
+
+      <div id="myResults" class="my-results">
+
+        <p>
+          Sélectionne ton profil pour voir tes résultats.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ============================= -->
+  <!-- FOOTER -->
+  <!-- ============================= -->
+
+  <footer>
+
+    <div class="logo footer-logo">
+      <span>STAR</span>
+      <strong>ACADEMY</strong>
+    </div>
+
+    <p>
+      Notre saison • Nos pronostics • Nos souvenirs
+    </p>
+
+  </footer>
+
+
+  <!-- ============================= -->
+  <!-- SUPABASE -->
+  <!-- ============================= -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
