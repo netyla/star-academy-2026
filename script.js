@@ -7,12 +7,8 @@
    SUPABASE
    ================================================== */
 
-const SUPABASE_URL =
-  "TON_URL_SUPABASE";
-
-
-const SUPABASE_ANON_KEY =
-  "TA_CLE_ANON_SUPABASE";
+const SUPABASE_URL = "https://hkjcllpnblziibdjehsx.supabase.co";
+const SUPABASE_ANON_KEY = "TA_CLÉ_PUBLIQUE";
 
 
 const supabaseClient =
