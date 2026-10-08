@@ -8,7 +8,7 @@
    ================================================== */
 
 const SUPABASE_URL = "https://hkjcllpnblziibdjehsx.supabase.co";
-const SUPABASE_ANON_KEY = "TA_CLÉ_PUBLIQUE";
+const SUPABASE_ANON_KEY = "sb_publishable_DoddvQYfbdAwlh-23vPK3g_ux7_3qnT";
 
 
 const supabaseClient =
