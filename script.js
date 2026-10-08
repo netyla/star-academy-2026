@@ -1277,8 +1277,6 @@ async function init() {
 
   await loadStudents();
 
-  await loadRanking();
-
 }
 
 
@@ -1295,8 +1293,6 @@ setInterval(
     await loadPlayers();
 
     await loadStudents();
-
-    await loadRanking();
 
 
     if (currentPlayer) {
