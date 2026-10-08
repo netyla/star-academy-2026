@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Star Academy — Nos pronostics</title>
+  <title>Star Academy — Notre saison</title>
 
   <link
     rel="preconnect"
@@ -39,18 +39,11 @@
 <body>
 
 
-<!-- ==================================================
-     HEADER
-     ================================================== -->
-
 <header class="header">
 
   <div class="logo">
-
     <span>STAR</span>
-
     <strong>ACADEMY</strong>
-
   </div>
 
 
@@ -64,21 +57,13 @@
 
   <nav id="nav">
 
-    <a href="#accueil">
-      Accueil
-    </a>
+    <a href="#accueil">Accueil</a>
 
-    <a href="#primes">
-      Les Primes
-    </a>
+    <a href="#profils">Profils</a>
 
-    <a href="#classement">
-      Classement
-    </a>
+    <a href="#candidats">Candidats</a>
 
-    <a href="#candidats">
-      Candidats
-    </a>
+    <a href="#primes">Les Primes</a>
 
   </nav>
 
@@ -86,11 +71,12 @@
 
 
 
+<main>
+
+
 <!-- ==================================================
      ACCUEIL
      ================================================== -->
-
-<main>
 
 <section
   id="accueil"
@@ -105,32 +91,24 @@
 
 
     <h1>
-
-      Nos pronostics<br>
-
-      <span>
-        Star Academy
-      </span>
-
+      Notre saison<br>
+      <span>Star Academy</span>
     </h1>
 
 
     <p class="hero-text">
 
-      Chaque Prime, chacune fait ses pronostics.
-      Les points sont ensuite comptabilisés
-      pour établir notre classement.
+      Nos pronostics, nos avis, nos coups de cœur
+      et tous nos souvenirs de la saison.
 
     </p>
 
 
     <a
-      href="#primes"
+      href="#profils"
       class="main-button"
     >
-
-      Commencer les pronostics
-
+      Commencer
     </a>
 
   </div>
@@ -143,38 +121,35 @@
      PROFILS
      ================================================== -->
 
-<section class="player-section">
+<section
+  id="profils"
+  class="player-section"
+>
 
   <div class="section-title">
 
-    <p>
-      QUI ES-TU ?
-    </p>
+    <p>QUI ES-TU ?</p>
 
-    <h2>
-      Choisis ton profil
-    </h2>
+    <h2>Choisis ton profil</h2>
+
+    <span>
+      Chaque profil possède ses propres avis et pronostics.
+    </span>
 
   </div>
 
 
   <div
-    class="players"
     id="players"
-  >
-
-    <!-- Les profils seront ajoutés automatiquement -->
-
-  </div>
+    class="players"
+  ></div>
 
 
   <button
-    class="add-profile-button"
     id="addProfileButton"
+    class="add-profile-button"
   >
-
     + Ajouter un profil
-
   </button>
 
 
@@ -182,9 +157,7 @@
     id="selectedPlayer"
     class="selected-player"
   >
-
-    Aucune joueuse sélectionnée
-
+    Aucun profil sélectionné
   </p>
 
 </section>
@@ -202,16 +175,12 @@
 
   <div class="section-title">
 
-    <p>
-      SAISON
-    </p>
+    <p>SAISON 2026</p>
 
-    <h2>
-      Les candidats
-    </h2>
+    <h2>Les candidats</h2>
 
     <span>
-      Ajoutez les candidats de cette saison.
+      Ajoutez les candidats de la saison.
     </span>
 
   </div>
@@ -220,11 +189,7 @@
   <div
     id="candidateList"
     class="candidate-list"
-  >
-
-    <!-- Candidats -->
-
-  </div>
+  ></div>
 
 
   <div class="candidate-add">
@@ -237,12 +202,8 @@
     >
 
 
-    <button
-      id="addCandidateButton"
-    >
-
+    <button id="addCandidateButton">
       Ajouter
-
     </button>
 
   </div>
@@ -262,39 +223,33 @@
 
   <div class="section-title">
 
-    <p>
-      STAR ACADEMY
-    </p>
+    <p>STAR ACADEMY</p>
 
-    <h2>
-      Les Primes
-    </h2>
+    <h2>Les Primes</h2>
 
     <span>
-      Choisis un Prime pour enregistrer tes pronostics.
+      Choisis un Prime pour noter et donner ton avis.
     </span>
 
   </div>
 
 
   <div
-    class="prime-grid"
     id="primeGrid"
-  >
-
-  </div>
+    class="prime-grid"
+  ></div>
 
 </section>
 
 
 
 <!-- ==================================================
-     PRONOSTICS
+     ESPACE DU PRIME
      ================================================== -->
 
 <section
-  id="pronostics"
-  class="prediction-section hidden"
+  id="primeSpace"
+  class="prime-space hidden"
 >
 
   <div class="prediction-header">
@@ -303,17 +258,17 @@
       id="backToPrimes"
       class="back-button"
     >
-
       ← Retour aux Primes
-
     </button>
 
 
-    <p id="primeNumber"></p>
+    <p id="primeNumber">
+      PRIME 1
+    </p>
 
 
     <h2 id="primeTitle">
-      Prime
+      Mon Prime
     </h2>
 
 
@@ -323,124 +278,92 @@
 
 
 
+<!-- ==================================================
+     PRONOSTICS
+     ================================================== -->
+
+<div class="subsection">
+
+  <div class="subsection-title">
+
+    <span>01</span>
+
+    <div>
+      <p>MES PRONOSTICS</p>
+      <h3>Qui va se démarquer ?</h3>
+    </div>
+
+  </div>
+
+
   <form id="predictionForm">
 
 
-    <div class="prediction-card">
+    <div class="prediction-grid">
 
-      <h3>
-        ⭐ Qui sera immunisé(e) ?
-      </h3>
 
-      <select id="immunity">
+      <div class="prediction-card">
 
-        <option value="">
-          Choisir...
-        </option>
+        <h4>⭐ Qui sera immunisé(e) ?</h4>
 
-      </select>
+        <select id="immunity"></select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>🎤 Meilleur duo</h4>
+
+        <select id="bestDuo"></select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>💫 Meilleure prestation</h4>
+
+        <select id="bestPerformance"></select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>❤️ Ton coup de cœur</h4>
+
+        <select id="favorite"></select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>🚪 Qui sera éliminé(e) ?</h4>
+
+        <select id="eliminated"></select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>🏆 Qui pourrait gagner ?</h4>
+
+        <select id="winner"></select>
+
+      </div>
+
 
     </div>
-
-
-
-    <div class="prediction-card">
-
-      <h3>
-        🎤 Qui aura le meilleur duo ?
-      </h3>
-
-      <select id="bestDuo">
-
-        <option value="">
-          Choisir...
-        </option>
-
-      </select>
-
-    </div>
-
-
-
-    <div class="prediction-card">
-
-      <h3>
-        💫 Qui fera la meilleure prestation ?
-      </h3>
-
-      <select id="bestPerformance">
-
-        <option value="">
-          Choisir...
-        </option>
-
-      </select>
-
-    </div>
-
-
-
-    <div class="prediction-card">
-
-      <h3>
-        ❤️ Ton élève préféré(e)
-      </h3>
-
-      <select id="favorite">
-
-        <option value="">
-          Choisir...
-        </option>
-
-      </select>
-
-    </div>
-
-
-
-    <div class="prediction-card">
-
-      <h3>
-        🚪 Qui sera éliminé(e) ?
-      </h3>
-
-      <select id="eliminated">
-
-        <option value="">
-          Choisir...
-        </option>
-
-      </select>
-
-    </div>
-
-
-
-    <div class="prediction-card">
-
-      <h3>
-        🏆 Qui gagnera le Prime ?
-      </h3>
-
-      <select id="winner">
-
-        <option value="">
-          Choisir...
-        </option>
-
-      </select>
-
-    </div>
-
 
 
     <button
       type="submit"
       class="save-button"
     >
-
       Enregistrer mes pronostics
-
     </button>
 
 
@@ -449,71 +372,157 @@
       class="save-message"
     ></p>
 
-
   </form>
 
-</section>
+</div>
 
 
 
 <!-- ==================================================
-     CLASSEMENT
+     NOTES DES CANDIDATS
      ================================================== -->
 
-<section
-  id="classement"
-  class="ranking-section"
->
+<div class="subsection">
 
-  <div class="section-title">
+  <div class="subsection-title">
 
-    <p>
-      QUI VA GAGNER ?
-    </p>
+    <span>02</span>
 
-    <h2>
-      Le classement
-    </h2>
-
-    <span>
-      Les points seront mis à jour après chaque Prime.
-    </span>
+    <div>
+      <p>MES NOTES</p>
+      <h3>Mon avis sur chaque candidat</h3>
+    </div>
 
   </div>
 
 
   <div
-    id="ranking"
-    class="ranking"
+    id="ratingsContainer"
+    class="ratings-container"
+  ></div>
+
+
+  <button
+    id="saveRatingsButton"
+    class="save-button"
+    type="button"
   >
+    Enregistrer mes notes
+  </button>
 
-    <div class="ranking-empty">
 
-      Les scores apparaîtront ici.
+  <p
+    id="ratingsMessage"
+    class="save-message"
+  ></p>
 
+</div>
+
+
+
+<!-- ==================================================
+     CATÉGORIES
+     ================================================== -->
+
+<div class="subsection">
+
+  <div class="subsection-title">
+
+    <span>03</span>
+
+    <div>
+      <p>MES CATÉGORIES</p>
+      <h3>Mes impressions du moment</h3>
     </div>
 
   </div>
+
+
+  <div
+    id="categoriesContainer"
+    class="categories-container"
+  ></div>
+
+
+  <button
+    id="saveCategoriesButton"
+    class="save-button"
+    type="button"
+  >
+    Enregistrer mes catégories
+  </button>
+
+
+  <p
+    id="categoriesMessage"
+    class="save-message"
+  ></p>
+
+</div>
+
+
+
+<!-- ==================================================
+     TOP 5
+     ================================================== -->
+
+<div class="subsection">
+
+  <div class="subsection-title">
+
+    <span>04</span>
+
+    <div>
+      <p>MON TOP 5</p>
+      <h3>Mes favoris du moment</h3>
+    </div>
+
+  </div>
+
+
+  <div
+    id="topFiveContainer"
+    class="top-five-container"
+  ></div>
+
+
+  <button
+    id="saveTopFiveButton"
+    class="save-button"
+    type="button"
+  >
+    Enregistrer mon Top 5
+  </button>
+
+
+  <p
+    id="topFiveMessage"
+    class="save-message"
+  ></p>
+
+</div>
+
+
 
 </section>
 
 
 
 <!-- ==================================================
-     MES RÉSULTATS
+     HISTORIQUE
      ================================================== -->
 
-<section class="results-section">
+<section class="history-section">
 
   <div class="section-title">
 
-    <p>
-      HISTORIQUE
-    </p>
+    <p>MON HISTORIQUE</p>
 
-    <h2>
-      Mes résultats
-    </h2>
+    <h2>Mes Primes</h2>
+
+    <span>
+      Retrouve ce que tu pensais à chaque Prime.
+    </span>
 
   </div>
 
@@ -524,7 +533,7 @@
   >
 
     <p>
-      Sélectionne ton profil pour voir tes résultats.
+      Sélectionne ton profil pour voir ton historique.
     </p>
 
   </div>
@@ -536,36 +545,24 @@
 
 
 
-<!-- ==================================================
-     FOOTER
-     ================================================== -->
-
 <footer>
 
   <div class="logo footer-logo">
 
-    <span>
-      STAR
-    </span>
+    <span>STAR</span>
 
-    <strong>
-      ACADEMY
-    </strong>
+    <strong>ACADEMY</strong>
 
   </div>
 
 
   <p>
-    Notre saison • Nos pronostics • Nos souvenirs
+    Notre saison • Nos avis • Nos souvenirs
   </p>
 
 </footer>
 
 
-
-<!-- ==================================================
-     SUPABASE
-     ================================================== -->
 
 <script
   src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
