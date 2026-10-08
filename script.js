@@ -160,6 +160,18 @@ const categoriesContainer =
 const topFiveContainer =
   document.getElementById("topFiveContainer");
 
+const primeFinalRating =
+  document.getElementById("primeFinalRating");
+
+const primeFinalComment =
+  document.getElementById("primeFinalComment");
+
+const savePrimeRatingButton =
+  document.getElementById("savePrimeRatingButton");
+
+const primeRatingMessage =
+  document.getElementById("primeRatingMessage");
+
 
 /* ==================================================
    MENU MOBILE
@@ -430,11 +442,6 @@ async function loadStudents() {
 
   displayStudents();
 
-
-  /*
-     Si un Prime est déjà ouvert,
-     on actualise les menus.
-  */
 
   if (currentPrime) {
 
@@ -860,6 +867,13 @@ async function openPrime(prime) {
   createTopFive();
 
 
+  /*
+     Note finale du Prime
+  */
+
+  resetPrimeFinalRating();
+
+
   primeSpace.classList.remove(
     "hidden"
   );
@@ -871,14 +885,18 @@ async function openPrime(prime) {
 
 
   /*
-     On recharge ce qui avait déjà
-     été enregistré.
+     On recharge les données enregistrées.
   */
 
   await loadPrediction();
+
   await loadRatings();
+
   await loadCategories();
+
   await loadTopFive();
+
+  await loadPrimeFinalRating();
 
 }
 
@@ -1265,11 +1283,6 @@ async function saveRatings() {
     "Enregistrement...";
 
 
-  /*
-     On vérifie que chaque candidat
-     possède une note.
-  */
-
   const rows = [];
 
 
@@ -1565,12 +1578,6 @@ async function saveCategories() {
     "Enregistrement...";
 
 
-  /*
-     On supprime les anciennes réponses
-     du Prime pour permettre de modifier
-     librement les catégories.
-  */
-
   const {
     error: deleteError
   } =
@@ -1855,10 +1862,6 @@ async function saveTopFive() {
     );
 
 
-  /*
-     Il faut 5 candidats.
-  */
-
   if (
     students.length < 5
   ) {
@@ -1870,10 +1873,6 @@ async function saveTopFive() {
 
   }
 
-
-  /*
-     Vérification des choix.
-  */
 
   const chosen = [];
 
@@ -1911,10 +1910,6 @@ async function saveTopFive() {
   }
 
 
-  /*
-     On supprime l'ancien Top 5.
-  */
-
   const {
     error: deleteError
   } =
@@ -1942,10 +1937,6 @@ async function saveTopFive() {
 
   }
 
-
-  /*
-     On crée le nouveau Top 5.
-  */
 
   const rows =
     selects.map(
@@ -1999,6 +1990,248 @@ async function saveTopFive() {
 
 
 /* ==================================================
+   NOTE FINALE DU PRIME
+   ================================================== */
+
+function resetPrimeFinalRating() {
+
+  if (primeFinalRating) {
+
+    primeFinalRating.value = "";
+
+  }
+
+
+  if (primeFinalComment) {
+
+    primeFinalComment.value = "";
+
+  }
+
+
+  if (primeRatingMessage) {
+
+    primeRatingMessage.textContent = "";
+
+  }
+
+}
+
+
+/* ==================================================
+   CHARGER LA NOTE FINALE DU PRIME
+   ================================================== */
+
+async function loadPrimeFinalRating() {
+
+  if (
+    !primeFinalRating ||
+    !primeFinalComment ||
+    !currentPlayer ||
+    !currentPrime
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("prime_ratings")
+      .select("*")
+      .eq(
+        "player_name",
+        currentPlayer
+      )
+      .eq(
+        "prime_number",
+        currentPrime
+      )
+      .maybeSingle();
+
+
+  if (error) {
+
+    console.error(
+      "Erreur chargement note finale du Prime :",
+      error
+    );
+
+    return;
+
+  }
+
+
+  if (!data) {
+
+    return;
+
+  }
+
+
+  primeFinalRating.value =
+    data.rating ?? "";
+
+
+  primeFinalComment.value =
+    data.comment ?? "";
+
+}
+
+
+/* ==================================================
+   ENREGISTRER LA NOTE FINALE DU PRIME
+   ================================================== */
+
+if (savePrimeRatingButton) {
+
+  savePrimeRatingButton.addEventListener(
+    "click",
+    savePrimeFinalRating
+  );
+
+}
+
+
+async function savePrimeFinalRating() {
+
+  if (
+    !currentPlayer ||
+    !currentPrime
+  ) {
+
+    return;
+
+  }
+
+
+  const rating =
+    Number(
+      primeFinalRating?.value
+    );
+
+
+  if (
+    primeFinalRating?.value === "" ||
+    Number.isNaN(rating) ||
+    rating < 0 ||
+    rating > 10
+  ) {
+
+    if (primeRatingMessage) {
+
+      primeRatingMessage.textContent =
+        "❌ Donne une note comprise entre 0 et 10.";
+
+    }
+
+
+    primeFinalRating?.focus();
+
+    return;
+
+  }
+
+
+  if (primeRatingMessage) {
+
+    primeRatingMessage.textContent =
+      "Enregistrement...";
+
+  }
+
+
+  const row = {
+
+    player_name:
+      currentPlayer,
+
+    prime_number:
+      currentPrime,
+
+    student_id:
+      getCurrentPlayerId(),
+
+    rating:
+      rating,
+
+    comment:
+      primeFinalComment?.value.trim() || null
+
+  };
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("prime_ratings")
+      .upsert(
+        row,
+        {
+          onConflict:
+            "player_name,prime_number,student_id"
+        }
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Erreur enregistrement note finale :",
+      error
+    );
+
+
+    if (primeRatingMessage) {
+
+      primeRatingMessage.textContent =
+        "❌ Impossible d'enregistrer ta note.";
+
+    }
+
+
+    return;
+
+  }
+
+
+  if (primeRatingMessage) {
+
+    primeRatingMessage.textContent =
+      "✓ Ta note du Prime est enregistrée !";
+
+  }
+
+
+  await loadMyResults();
+
+}
+
+
+/* ==================================================
+   RÉCUPÉRER L'ID DU PROFIL ACTUEL
+   ================================================== */
+
+function getCurrentPlayerId() {
+
+  const player =
+    players.find(
+      item =>
+        item.name === currentPlayer
+    );
+
+
+  return player?.id || null;
+
+}
+
+
+/* ==================================================
    HISTORIQUE
    ================================================== */
 
@@ -2009,14 +2242,10 @@ async function loadMyResults() {
   }
 
 
-  /*
-     On récupère les Primes où il y a
-     des données enregistrées.
-  */
-
   const [
     predictionsResult,
-    ratingsResult
+    ratingsResult,
+    primeRatingsResult
   ] =
     await Promise.all([
 
@@ -2048,6 +2277,22 @@ async function loadMyResults() {
           {
             ascending: true
           }
+        ),
+
+      supabaseClient
+        .from("prime_ratings")
+        .select(
+          "prime_number,rating,comment"
+        )
+        .eq(
+          "player_name",
+          currentPlayer
+        )
+        .order(
+          "prime_number",
+          {
+            ascending: true
+          }
         )
 
     ]);
@@ -2057,11 +2302,14 @@ async function loadMyResults() {
     predictionsResult.error
     ||
     ratingsResult.error
+    ||
+    primeRatingsResult.error
   ) {
 
     console.error(
       predictionsResult.error ||
-      ratingsResult.error
+      ratingsResult.error ||
+      primeRatingsResult.error
     );
 
     return;
@@ -2091,6 +2339,15 @@ async function loadMyResults() {
     );
 
 
+  (primeRatingsResult.data || [])
+    .forEach(
+      item =>
+        primeNumbers.add(
+          item.prime_number
+        )
+    );
+
+
   myResults.innerHTML = "";
 
 
@@ -2109,31 +2366,16 @@ async function loadMyResults() {
   }
 
 
-  const ratingsByPrime = {};
+  const primeRatingsByPrime = {};
 
 
-  (ratingsResult.data || [])
+  (primeRatingsResult.data || [])
     .forEach(
       item => {
 
-        if (
-          !ratingsByPrime[
-            item.prime_number
-          ]
-        ) {
-
-          ratingsByPrime[
-            item.prime_number
-          ] = [];
-
-        }
-
-
-        ratingsByPrime[
+        primeRatingsByPrime[
           item.prime_number
-        ].push(
-          Number(item.rating)
-        );
+        ] = item;
 
       }
     );
@@ -2146,30 +2388,18 @@ async function loadMyResults() {
     .forEach(
       prime => {
 
-        const values =
-          ratingsByPrime[prime] || [];
+        const finalRating =
+          primeRatingsByPrime[prime];
 
 
-        let averageText =
-          "Pas encore noté";
+        let finalText =
+          "Note finale non enregistrée";
 
 
-        if (values.length > 0) {
+        if (finalRating) {
 
-          const total =
-            values.reduce(
-              (sum, value) =>
-                sum + value,
-              0
-            );
-
-
-          const average =
-            total / values.length;
-
-
-          averageText =
-            `⭐ Moyenne : ${average.toFixed(1)}/10`;
+          finalText =
+            `⭐ ${finalRating.rating}/10`;
 
         }
 
@@ -2189,10 +2419,33 @@ async function loadMyResults() {
           </h3>
 
           <p>
-            ${averageText}
+            ${finalText}
           </p>
 
         `;
+
+
+        if (
+          finalRating?.comment
+        ) {
+
+          const comment =
+            document.createElement("p");
+
+
+          comment.textContent =
+            `💭 ${finalRating.comment}`;
+
+
+          comment.style.marginTop =
+            "8px";
+
+
+          div.appendChild(
+            comment
+          );
+
+        }
 
 
         myResults.appendChild(
