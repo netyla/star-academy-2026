@@ -39,6 +39,10 @@
 <body>
 
 
+<!-- ==================================================
+     HEADER
+     ================================================== -->
+
 <header class="header">
 
   <div class="logo">
@@ -50,6 +54,8 @@
   <button
     class="menu-button"
     id="menuButton"
+    type="button"
+    aria-label="Ouvrir le menu"
   >
     ☰
   </button>
@@ -57,13 +63,25 @@
 
   <nav id="nav">
 
-    <a href="#accueil">Accueil</a>
+    <a href="#accueil">
+      Accueil
+    </a>
 
-    <a href="#profils">Profils</a>
+    <a href="#profils">
+      Profils
+    </a>
 
-    <a href="#candidats">Candidats</a>
+    <a href="#candidats">
+      Candidats
+    </a>
 
-    <a href="#primes">Les Primes</a>
+    <a href="#primes">
+      Les Primes
+    </a>
+
+    <a href="#historique">
+      Mes résultats
+    </a>
 
   </nav>
 
@@ -128,9 +146,13 @@
 
   <div class="section-title">
 
-    <p>QUI ES-TU ?</p>
+    <p>
+      QUI ES-TU ?
+    </p>
 
-    <h2>Choisis ton profil</h2>
+    <h2>
+      Choisis ton profil
+    </h2>
 
     <span>
       Chaque profil possède ses propres avis et pronostics.
@@ -148,6 +170,7 @@
   <button
     id="addProfileButton"
     class="add-profile-button"
+    type="button"
   >
     + Ajouter un profil
   </button>
@@ -175,9 +198,13 @@
 
   <div class="section-title">
 
-    <p>SAISON 2026</p>
+    <p>
+      SAISON 2026
+    </p>
 
-    <h2>Les candidats</h2>
+    <h2>
+      Les candidats
+    </h2>
 
     <span>
       Ajoutez les candidats de la saison.
@@ -202,7 +229,10 @@
     >
 
 
-    <button id="addCandidateButton">
+    <button
+      id="addCandidateButton"
+      type="button"
+    >
       Ajouter
     </button>
 
@@ -223,9 +253,13 @@
 
   <div class="section-title">
 
-    <p>STAR ACADEMY</p>
+    <p>
+      STAR ACADEMY
+    </p>
 
-    <h2>Les Primes</h2>
+    <h2>
+      Les Primes
+    </h2>
 
     <span>
       Choisis un Prime pour noter et donner ton avis.
@@ -257,6 +291,7 @@
     <button
       id="backToPrimes"
       class="back-button"
+      type="button"
     >
       ← Retour aux Primes
     </button>
@@ -279,18 +314,27 @@
 
 
 <!-- ==================================================
-     PRONOSTICS
+     01 — PRONOSTICS
      ================================================== -->
 
 <div class="subsection">
 
   <div class="subsection-title">
 
-    <span>01</span>
+    <span>
+      01
+    </span>
 
     <div>
-      <p>MES PRONOSTICS</p>
-      <h3>Qui va se démarquer ?</h3>
+
+      <p>
+        MES PRONOSTICS
+      </p>
+
+      <h3>
+        Qui va se démarquer ?
+      </h3>
+
     </div>
 
   </div>
@@ -298,60 +342,95 @@
 
   <form id="predictionForm">
 
-
     <div class="prediction-grid">
 
 
       <div class="prediction-card">
 
-        <h4>⭐ Qui sera immunisé(e) ?</h4>
+        <h4>
+          ⭐ Qui sera immunisé(e) ?
+        </h4>
 
-        <select id="immunity"></select>
-
-      </div>
-
-
-      <div class="prediction-card">
-
-        <h4>🎤 Meilleur duo</h4>
-
-        <select id="bestDuo"></select>
+        <select id="immunity">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
 
       </div>
 
 
       <div class="prediction-card">
 
-        <h4>💫 Meilleure prestation</h4>
+        <h4>
+          🎤 Meilleur duo
+        </h4>
 
-        <select id="bestPerformance"></select>
-
-      </div>
-
-
-      <div class="prediction-card">
-
-        <h4>❤️ Ton coup de cœur</h4>
-
-        <select id="favorite"></select>
+        <select id="bestDuo">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
 
       </div>
 
 
       <div class="prediction-card">
 
-        <h4>🚪 Qui sera éliminé(e) ?</h4>
+        <h4>
+          💫 Meilleure prestation
+        </h4>
 
-        <select id="eliminated"></select>
+        <select id="bestPerformance">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
 
       </div>
 
 
       <div class="prediction-card">
 
-        <h4>🏆 Qui pourrait gagner ?</h4>
+        <h4>
+          ❤️ Ton coup de cœur
+        </h4>
 
-        <select id="winner"></select>
+        <select id="favorite">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>
+          🚪 Qui sera éliminé(e) ?
+        </h4>
+
+        <select id="eliminated">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="prediction-card">
+
+        <h4>
+          🏆 Qui pourrait gagner ?
+        </h4>
+
+        <select id="winner">
+          <option value="">
+            Choisir...
+          </option>
+        </select>
 
       </div>
 
@@ -379,18 +458,27 @@
 
 
 <!-- ==================================================
-     NOTES DES CANDIDATS
+     02 — NOTES
      ================================================== -->
 
 <div class="subsection">
 
   <div class="subsection-title">
 
-    <span>02</span>
+    <span>
+      02
+    </span>
 
     <div>
-      <p>MES NOTES</p>
-      <h3>Mon avis sur chaque candidat</h3>
+
+      <p>
+        MES NOTES
+      </p>
+
+      <h3>
+        Mon avis sur chaque candidat
+      </h3>
+
     </div>
 
   </div>
@@ -421,18 +509,27 @@
 
 
 <!-- ==================================================
-     CATÉGORIES
+     03 — CATÉGORIES
      ================================================== -->
 
 <div class="subsection">
 
   <div class="subsection-title">
 
-    <span>03</span>
+    <span>
+      03
+    </span>
 
     <div>
-      <p>MES CATÉGORIES</p>
-      <h3>Mes impressions du moment</h3>
+
+      <p>
+        MES CATÉGORIES
+      </p>
+
+      <h3>
+        Mes impressions du moment
+      </h3>
+
     </div>
 
   </div>
@@ -463,18 +560,27 @@
 
 
 <!-- ==================================================
-     TOP 5
+     04 — TOP 5
      ================================================== -->
 
 <div class="subsection">
 
   <div class="subsection-title">
 
-    <span>04</span>
+    <span>
+      04
+    </span>
 
     <div>
-      <p>MON TOP 5</p>
-      <h3>Mes favoris du moment</h3>
+
+      <p>
+        MON TOP 5
+      </p>
+
+      <h3>
+        Mes favoris du moment
+      </h3>
+
     </div>
 
   </div>
@@ -512,13 +618,20 @@
      HISTORIQUE
      ================================================== -->
 
-<section class="history-section">
+<section
+  id="historique"
+  class="history-section"
+>
 
   <div class="section-title">
 
-    <p>MON HISTORIQUE</p>
+    <p>
+      MON HISTORIQUE
+    </p>
 
-    <h2>Mes Primes</h2>
+    <h2>
+      Mes Primes
+    </h2>
 
     <span>
       Retrouve ce que tu pensais à chaque Prime.
@@ -545,13 +658,21 @@
 
 
 
+<!-- ==================================================
+     FOOTER
+     ================================================== -->
+
 <footer>
 
   <div class="logo footer-logo">
 
-    <span>STAR</span>
+    <span>
+      STAR
+    </span>
 
-    <strong>ACADEMY</strong>
+    <strong>
+      ACADEMY
+    </strong>
 
   </div>
 
@@ -564,10 +685,18 @@
 
 
 
+<!-- ==================================================
+     SUPABASE
+     ================================================== -->
+
 <script
   src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ></script>
 
+
+<!-- ==================================================
+     SCRIPT DU SITE
+     ================================================== -->
 
 <script src="script.js"></script>
 
