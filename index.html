@@ -608,7 +608,59 @@
 
 </div>
 
+<div class="subsection final-prime-rating">
+  <div class="subsection-title">
+    <span>05</span>
+    <div>
+      <p>MON AVIS SUR LE PRIME</p>
+      <h3>Ma note finale du Prime</h3>
+    </div>
+  </div>
 
+  <div class="final-rating-card">
+
+    <div class="final-rating-question">
+      <span>⭐</span>
+      <div>
+        <strong>Alors, ce Prime ?</strong>
+        <p>Donne-lui une note sur 10 !</p>
+      </div>
+    </div>
+
+    <div class="final-rating-choice">
+      <label for="primeFinalRating">Ma note</label>
+
+      <div class="final-rating-input">
+        <input
+          type="number"
+          id="primeFinalRating"
+          min="0"
+          max="10"
+          step="1"
+          placeholder="—"
+        >
+        <span>/ 10</span>
+      </div>
+    </div>
+
+    <textarea
+      id="primeFinalComment"
+      placeholder="Ton avis sur le Prime... 💭"
+      maxlength="500"
+    ></textarea>
+
+    <button
+      id="savePrimeRatingButton"
+      class="save-button"
+      type="button"
+    >
+      Enregistrer ma note du Prime
+    </button>
+
+    <p id="primeRatingMessage" class="save-message"></p>
+
+  </div>
+</div>
 
 </section>
 
