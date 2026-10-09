@@ -209,6 +209,60 @@
 
   <p id="authMessage" role="status" aria-live="polite"></p>
 </section>
+
+  
+<!-- ==================================================
+     CONNEXION AU COMPTE
+     ================================================== -->
+
+<section id="connexion" class="player-section">
+
+  <div class="section-title">
+    <p>TON ESPACE PERSONNEL</p>
+    <h2>Bienvenue !</h2>
+    <span>Connecte-toi pour retrouver tes pronostics et tes notes.</span>
+  </div>
+
+  <div id="authForms">
+
+    <form id="loginForm">
+      <h3>J’ai déjà un compte</h3>
+
+      <label for="loginEmail">Adresse e-mail</label>
+      <input type="email" id="loginEmail" autocomplete="email" required>
+
+      <label for="loginPassword">Mot de passe</label>
+      <input type="password" id="loginPassword" autocomplete="current-password" required>
+
+      <button type="submit" class="main-button">Me connecter</button>
+    </form>
+
+    <form id="signupForm">
+      <h3>Créer mon compte</h3>
+
+      <label for="signupName">Mon prénom ou pseudo</label>
+      <input type="text" id="signupName" maxlength="40" required>
+
+      <label for="signupEmail">Adresse e-mail</label>
+      <input type="email" id="signupEmail" autocomplete="email" required>
+
+      <label for="signupPassword">Choisir un mot de passe</label>
+      <input type="password" id="signupPassword" autocomplete="new-password" minlength="6" required>
+
+      <button type="submit" class="main-button">Créer mon compte</button>
+    </form>
+
+  </div>
+
+  <div id="loggedInArea" hidden>
+    <p>Tu es connecté(e) avec le compte :</p>
+    <p id="loggedInEmail"></p>
+    <button id="logoutButton" type="button">Me déconnecter</button>
+  </div>
+
+  <p id="authMessage" role="status" aria-live="polite"></p>
+
+</section>
   
 <section
   id="profils"
