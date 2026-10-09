@@ -1,6 +1,7 @@
 
 /* ==================================================
    STAR ACADEMY 2026 — SCRIPT
+   Comptes utilisateurs + 13 primes + données personnelles
    ================================================== */
 
 
@@ -43,8 +44,10 @@ const categories = [
    3. VARIABLES
    ================================================== */
 
+let currentUser = null;
 let currentPlayer = null;
 let currentPrime = null;
+let currentLegacyPlayerId = null;
 
 let students = [];
 let players = [];
@@ -54,8 +57,19 @@ let players = [];
    4. ÉLÉMENTS HTML
    ================================================== */
 
+// Authentification
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const logoutButton = document.getElementById("logoutButton");
+const authMessage = document.getElementById("authMessage");
+const authForms = document.getElementById("authForms");
+const loggedInArea = document.getElementById("loggedInArea");
+const loggedInEmail = document.getElementById("loggedInEmail");
+
+// Anciens profils : conservés uniquement pour compatibilité
 const playersContainer = document.getElementById("players");
 const selectedPlayer = document.getElementById("selectedPlayer");
+const addProfileButton = document.getElementById("addProfileButton");
 
 const primeGrid = document.getElementById("primeGrid");
 const primeSpace = document.getElementById("primeSpace");
@@ -77,19 +91,19 @@ const candidateList = document.getElementById("candidateList");
 const candidateInput = document.getElementById("candidateInput");
 const addCandidateButton = document.getElementById("addCandidateButton");
 
-const addProfileButton = document.getElementById("addProfileButton");
-
 const ratingsContainer = document.getElementById("ratingsContainer");
 const categoriesContainer = document.getElementById("categoriesContainer");
 const topFiveContainer = document.getElementById("topFiveContainer");
 
 const primeFinalRating = document.getElementById("primeFinalRating");
 const primeFinalComment = document.getElementById("primeFinalComment");
-const savePrimeRatingButton = document.getElementById("savePrimeRatingButton");
+const savePrimeRatingButton =
+  document.getElementById("savePrimeRatingButton");
 const primeRatingMessage = document.getElementById("primeRatingMessage");
 
 const saveRatingsButton = document.getElementById("saveRatingsButton");
-const saveCategoriesButton = document.getElementById("saveCategoriesButton");
+const saveCategoriesButton =
+  document.getElementById("saveCategoriesButton");
 const saveTopFiveButton = document.getElementById("saveTopFiveButton");
 
 
@@ -98,7 +112,7 @@ const saveTopFiveButton = document.getElementById("saveTopFiveButton");
    ================================================== */
 
 function escapeHTML(value) {
-  return String(value)
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -106,11 +120,41 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-
 function showMessage(element, message) {
-  if (element) {
-    element.textContent = message;
-  }
+  if (element) element.textContent = message;
+}
+
+function requireLogin() {
+  if (currentUser) return true;
+
+  alert("Connecte-toi à ton compte pour continuer.");
+  document.getElementById("connexion")?.scrollIntoView({
+    behavior: "smooth"
+  });
+
+  return false;
+}
+
+function clearPersonalScreen() {
+  currentPlayer = null;
+  currentPrime = null;
+  currentLegacyPlayerId = null;
+
+  if (myResults) myResults.innerHTML = "";
+  if (primeSpace) primeSpace.classList.add("hidden");
+
+  if (selectedPlayer) selectedPlayer.textContent = "";
+
+  primeGrid?.querySelectorAll(".prime-card").forEach(card => {
+    card.classList.remove("active");
+  });
+}
+
+function resetPrimeFinalRating() {
+  if (primeFinalRating) primeFinalRating.value = "";
+  if (primeFinalComment) primeFinalComment.value = "";
+
+  showMessage(primeRatingMessage, "");
 }
 
 
@@ -126,178 +170,221 @@ if (menuButton && nav) {
 
 
 /* ==================================================
-   7. PROFILS
+   7. COMPTES : CONNEXION ET INSCRIPTION
    ================================================== */
 
-async function loadPlayers() {
+function updateAuthDisplay() {
+  const isLoggedIn = Boolean(currentUser);
+
+  if (authForms) {
+    authForms.classList.toggle("hidden", isLoggedIn);
+  }
+
+  if (loggedInArea) {
+    loggedInArea.classList.toggle("hidden", !isLoggedIn);
+  }
+
+  if (loggedInEmail) {
+    loggedInEmail.textContent = isLoggedIn
+      ? `Connecté(e) : ${currentUser.email || currentPlayer || ""}`
+      : "";
+  }
+
+  // L'ancien système de profils n'est plus utilisé pour se connecter.
+  const oldProfilesSection = document.getElementById("profils");
+
+  if (oldProfilesSection) {
+    oldProfilesSection.classList.add("hidden");
+  }
+
+  if (playersContainer) playersContainer.innerHTML = "";
+}
+
+async function getDisplayName(user) {
+  const metadataName =
+    user.user_metadata?.display_name ||
+    user.user_metadata?.name;
+
   const { data, error } = await supabaseClient
-    .from("players")
-    .select("*")
-    .order("created_at");
+    .from("profiles")
+    .select("name, display_name")
+    .eq("id", user.id)
+    .maybeSingle();
 
   if (error) {
-    console.error("Erreur chargement profils :", error);
+    console.error("Erreur lecture du profil du compte :", error);
+  }
+
+  return (
+    data?.display_name ||
+    data?.name ||
+    metadataName ||
+    user.email?.split("@")[0] ||
+    "Mon compte"
+  );
+}
+
+async function handleAuthenticatedUser(user) {
+  if (!user) {
+    currentUser = null;
+    clearPersonalScreen();
+    updateAuthDisplay();
     return;
   }
 
-  players = data || [];
-  displayPlayers();
-}
+  // Évite de recharger tout le compte inutilement.
+  if (currentUser?.id === user.id && currentPlayer) {
+    updateAuthDisplay();
+    return;
+  }
 
+  currentUser = user;
+  currentPlayer = await getDisplayName(user);
 
-function displayPlayers() {
-  if (!playersContainer) return;
+  clearPersonalScreen();
 
-  playersContainer.innerHTML = "";
+  // clearPersonalScreen remet le nom à null : on le restaure ici.
+  currentPlayer = await getDisplayName(user);
 
-  players.forEach((player, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "player-item";
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "player-card";
-
-    if (currentPlayer === player.name) {
-      button.classList.add("active");
-    }
-
-    button.innerHTML = `
-      <span class="player-number">
-        ${String(index + 1).padStart(2, "0")}
-      </span>
-      <span>${escapeHTML(player.name)}</span>
-    `;
-
-    button.addEventListener("click", () => {
-      selectPlayer(player.name, button);
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.textContent = "×";
-    deleteButton.className = "delete-player-button";
-    deleteButton.title = "Supprimer ce profil";
-    deleteButton.setAttribute(
-      "aria-label",
-      `Supprimer le profil ${player.name}`
-    );
-
-    deleteButton.addEventListener("click", event => {
-      event.stopPropagation();
-      deletePlayer(player.id, player.name);
-    });
-
-    wrapper.appendChild(button);
-    wrapper.appendChild(deleteButton);
-    playersContainer.appendChild(wrapper);
-  });
-}
-
-
-function selectPlayer(name, button) {
-  document.querySelectorAll(".player-card").forEach(card => {
-    card.classList.remove("active");
-  });
-
-  button.classList.add("active");
-  currentPlayer = name;
+  updateAuthDisplay();
 
   showMessage(
-    selectedPlayer,
-    `Profil sélectionné : ${name}`
+    authMessage,
+    "✓ Tu es connecté(e). Tes données sont associées à ton compte."
   );
 
-  loadMyResults();
+  await loadStudents();
+  await loadMyResults();
 }
 
+if (loginForm) {
+  loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
 
-async function deletePlayer(id, name) {
-  if (!confirm(`Supprimer le profil "${name}" ?`)) {
-    return;
-  }
+    const email = document.getElementById("loginEmail")?.value.trim();
+    const password = document.getElementById("loginPassword")?.value;
 
-  const { error } = await supabaseClient
-    .from("players")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    console.error("Erreur suppression profil :", error);
-    alert("Impossible de supprimer ce profil : " + error.message);
-    return;
-  }
-
-  if (currentPlayer === name) {
-    currentPlayer = null;
-    currentPrime = null;
-
-    showMessage(selectedPlayer, "");
-
-    if (myResults) {
-      myResults.innerHTML = "";
-    }
-
-    if (primeSpace) {
-      primeSpace.classList.add("hidden");
-    }
-
-    if (primeGrid) {
-      primeGrid.querySelectorAll(".prime-card").forEach(card => {
-        card.classList.remove("active");
-      });
-    }
-  }
-
-  await loadPlayers();
-}
-
-
-/* ==================================================
-   8. AJOUTER UN PROFIL
-   ================================================== */
-
-if (addProfileButton) {
-  addProfileButton.addEventListener("click", async () => {
-    if (players.length >= 4) {
-      alert("Les 4 profils sont déjà créés.");
+    if (!email || !password) {
+      showMessage(authMessage, "Renseigne ton e-mail et ton mot de passe.");
       return;
     }
 
-    const name = prompt("Quel est ton prénom ?");
+    showMessage(authMessage, "Connexion en cours...");
 
-    if (!name) return;
-
-    const cleanName = name.trim();
-
-    if (!cleanName) return;
-
-    const alreadyExists = players.some(player =>
-      player.name.toLowerCase() === cleanName.toLowerCase()
-    );
-
-    if (alreadyExists) {
-      alert("Ce prénom existe déjà.");
-      return;
-    }
-
-    const { error } = await supabaseClient
-      .from("players")
-      .insert({ name: cleanName });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
 
     if (error) {
-      console.error("Erreur ajout profil :", error);
-      alert("Erreur : " + error.message);
+      console.error("Erreur de connexion :", error);
+      showMessage(
+        authMessage,
+        "❌ Connexion impossible. Vérifie ton e-mail, ton mot de passe et la confirmation de ton compte."
+      );
       return;
     }
 
-    await loadPlayers();
+    await handleAuthenticatedUser(data.user);
+    loginForm.reset();
+  });
+}
+
+if (signupForm) {
+  signupForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const name = document.getElementById("signupName")?.value.trim();
+    const email = document.getElementById("signupEmail")?.value.trim();
+    const password = document.getElementById("signupPassword")?.value;
+
+    if (!name || !email || !password) {
+      showMessage(authMessage, "Remplis tous les champs pour créer ton compte.");
+      return;
+    }
+
+    if (password.length < 6) {
+      showMessage(
+        authMessage,
+        "Choisis un mot de passe d'au moins 6 caractères."
+      );
+      return;
+    }
+
+    showMessage(authMessage, "Création du compte en cours...");
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          display_name: name
+        }
+      }
+    });
+
+    if (error) {
+      console.error("Erreur de création de compte :", error);
+      showMessage(
+        authMessage,
+        "❌ Impossible de créer le compte : " + error.message
+      );
+      return;
+    }
+
+    signupForm.reset();
+
+    if (data.session && data.user) {
+      await handleAuthenticatedUser(data.user);
+      showMessage(authMessage, "✓ Ton compte est créé et tu es connecté(e).");
+    } else {
+      showMessage(
+        authMessage,
+        "✓ Compte créé ! Vérifie tes e-mails pour confirmer ton adresse, puis connecte-toi."
+      );
+    }
+  });
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", async () => {
+    showMessage(authMessage, "Déconnexion en cours...");
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      console.error("Erreur de déconnexion :", error);
+      showMessage(authMessage, "❌ Impossible de te déconnecter.");
+      return;
+    }
+
+    currentUser = null;
+    clearPersonalScreen();
+    updateAuthDisplay();
+
+    showMessage(authMessage, "Tu es déconnecté(e).");
+    document.getElementById("connexion")?.scrollIntoView({
+      behavior: "smooth"
+    });
   });
 }
 
 
 /* ==================================================
-   9. CANDIDATS
+   8. ANCIENS PROFILS : DÉSACTIVÉS
+   ================================================== */
+
+// Les comptes sont désormais gérés par Supabase Auth.
+// On ne crée plus de profils partagés avec le bouton historique.
+
+if (addProfileButton) {
+  addProfileButton.classList.add("hidden");
+}
+
+
+/* ==================================================
+   9. CANDIDATS PARTAGÉS
    ================================================== */
 
 async function loadStudents() {
@@ -312,16 +399,18 @@ async function loadStudents() {
   }
 
   students = data || [];
-
   displayStudents();
 
   if (currentPrime) {
     createRatingCards();
     createCategoryCards();
     createTopFive();
+
+    await loadRatings();
+    await loadCategories();
+    await loadTopFive();
   }
 }
-
 
 function displayStudents() {
   if (!candidateList) return;
@@ -343,30 +432,28 @@ function displayStudents() {
 
     const name = document.createElement("span");
     name.textContent = student.name;
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.textContent = "×";
-    deleteButton.setAttribute(
-      "aria-label",
-      `Supprimer ${student.name}`
-    );
-
-    deleteButton.addEventListener("click", () => {
-      deleteStudent(student.id);
-    });
-
     item.appendChild(name);
-    item.appendChild(deleteButton);
+
+    if (currentUser) {
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.textContent = "×";
+      deleteButton.setAttribute("aria-label", `Supprimer ${student.name}`);
+
+      deleteButton.addEventListener("click", () => {
+        deleteStudent(student.id);
+      });
+
+      item.appendChild(deleteButton);
+    }
+
     candidateList.appendChild(item);
   });
 }
 
-
 if (addCandidateButton) {
   addCandidateButton.addEventListener("click", addStudent);
 }
-
 
 if (candidateInput) {
   candidateInput.addEventListener("keydown", event => {
@@ -377,9 +464,8 @@ if (candidateInput) {
   });
 }
 
-
 async function addStudent() {
-  if (!candidateInput) return;
+  if (!requireLogin() || !candidateInput) return;
 
   const name = candidateInput.value.trim();
 
@@ -388,11 +474,7 @@ async function addStudent() {
     return;
   }
 
-  const exists = students.some(student =>
-    student.name.toLowerCase() === name.toLowerCase()
-  );
-
-  if (exists) {
+  if (students.some(student => student.name.toLowerCase() === name.toLowerCase())) {
     alert("Ce candidat existe déjà.");
     return;
   }
@@ -411,11 +493,9 @@ async function addStudent() {
   await loadStudents();
 }
 
-
 async function deleteStudent(id) {
-  if (!confirm("Supprimer ce candidat ?")) {
-    return;
-  }
+  if (!requireLogin()) return;
+  if (!confirm("Supprimer ce candidat ?")) return;
 
   const { error } = await supabaseClient
     .from("students")
@@ -447,9 +527,7 @@ function createPrimes() {
 
     card.innerHTML = `
       <div>
-        <div class="prime-number">
-          ${String(i).padStart(2, "0")}
-        </div>
+        <div class="prime-number">${String(i).padStart(2, "0")}</div>
         <h3>Prime ${i}</h3>
         <p>Mes avis &amp; pronostics</p>
       </div>
@@ -457,7 +535,7 @@ function createPrimes() {
     `;
 
     card.querySelector("button").addEventListener("click", () => {
-      openPrime(i);
+      openPrime(i, card);
     });
 
     primeGrid.appendChild(card);
@@ -466,17 +544,14 @@ function createPrimes() {
 
 
 /* ==================================================
-   11. REMPLIR LES LISTES DE CANDIDATS
+   11. LISTES DE CANDIDATS
    ================================================== */
 
 function fillSelect(selectId) {
   const select = document.getElementById(selectId);
-
   if (!select) return;
 
-  select.innerHTML = `
-    <option value="">Choisir...</option>
-  `;
+  select.innerHTML = `<option value="">Choisir...</option>`;
 
   students.forEach(student => {
     const option = document.createElement("option");
@@ -491,28 +566,24 @@ function fillSelect(selectId) {
    12. OUVRIR UN PRIME
    ================================================== */
 
-async function openPrime(prime) {
-  if (!currentPlayer) {
-    alert("Choisis d'abord ton profil.");
-
-    document.getElementById("profils")?.scrollIntoView({
-      behavior: "smooth"
-    });
-
-    return;
-  }
+async function openPrime(prime, card) {
+  if (!requireLogin()) return;
 
   if (students.length === 0) {
     alert("Ajoute d'abord les candidats.");
-
     document.getElementById("candidats")?.scrollIntoView({
       behavior: "smooth"
     });
-
     return;
   }
 
   currentPrime = prime;
+
+  primeGrid?.querySelectorAll(".prime-card").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  card?.classList.add("active");
 
   showMessage(primeNumber, `PRIME ${prime}`);
   showMessage(primeTitle, `Mes avis sur le Prime ${prime}`);
@@ -530,10 +601,8 @@ async function openPrime(prime) {
   createTopFive();
   resetPrimeFinalRating();
 
-  if (primeSpace) {
-    primeSpace.classList.remove("hidden");
-    primeSpace.scrollIntoView({ behavior: "smooth" });
-  }
+  primeSpace?.classList.remove("hidden");
+  primeSpace?.scrollIntoView({ behavior: "smooth" });
 
   await loadPrediction();
   await loadRatings();
@@ -542,38 +611,29 @@ async function openPrime(prime) {
   await loadPrimeFinalRating();
 }
 
-
-/* ==================================================
-   13. RETOUR AUX PRIMES
-   ================================================== */
-
 if (backToPrimes) {
   backToPrimes.addEventListener("click", () => {
-    if (primeSpace) {
-      primeSpace.classList.add("hidden");
-    }
-
-    primesSection?.scrollIntoView({
-      behavior: "smooth"
-    });
+    primeSpace?.classList.add("hidden");
+    primesSection?.scrollIntoView({ behavior: "smooth" });
   });
 }
 
 
 /* ==================================================
-   14. PRONOSTICS CLASSIQUES
+   13. PRONOSTICS CLASSIQUES
    ================================================== */
 
 if (predictionForm) {
   predictionForm.addEventListener("submit", async event => {
     event.preventDefault();
 
-    if (!currentPlayer || !currentPrime) {
-      showMessage(saveMessage, "❌ Choisis un profil et un Prime.");
+    if (!currentUser || !currentPrime || !currentPlayer) {
+      showMessage(saveMessage, "❌ Connecte-toi et ouvre un Prime.");
       return;
     }
 
     const prediction = {
+      user_id: currentUser.id,
       player_name: currentPlayer,
       prime_number: currentPrime,
       immunity: document.getElementById("immunity")?.value || "",
@@ -587,15 +647,25 @@ if (predictionForm) {
 
     showMessage(saveMessage, "Enregistrement...");
 
+    const { error: deleteError } = await supabaseClient
+      .from("predictions")
+      .delete()
+      .eq("user_id", currentUser.id)
+      .eq("prime_number", currentPrime);
+
+    if (deleteError) {
+      console.error("Erreur remplacement pronostics :", deleteError);
+      showMessage(saveMessage, "❌ Impossible d'enregistrer les pronostics.");
+      return;
+    }
+
     const { error } = await supabaseClient
       .from("predictions")
-      .upsert(prediction, {
-        onConflict: "player_name,prime_number"
-      });
+      .insert(prediction);
 
     if (error) {
       console.error("Erreur enregistrement pronostics :", error);
-      showMessage(saveMessage, "❌ Impossible d'enregistrer.");
+      showMessage(saveMessage, "❌ Impossible d'enregistrer les pronostics.");
       return;
     }
 
@@ -604,16 +674,15 @@ if (predictionForm) {
   });
 }
 
-
 async function loadPrediction() {
-  if (!predictionForm || !currentPlayer || !currentPrime) return;
+  if (!predictionForm || !currentUser || !currentPrime) return;
 
   predictionForm.reset();
 
   const { data, error } = await supabaseClient
     .from("predictions")
     .select("*")
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime)
     .maybeSingle();
 
@@ -635,16 +704,13 @@ async function loadPrediction() {
 
   Object.entries(fields).forEach(([id, value]) => {
     const element = document.getElementById(id);
-
-    if (element) {
-      element.value = value || "";
-    }
+    if (element) element.value = value || "";
   });
 }
 
 
 /* ==================================================
-   15. NOTES SUR 10
+   14. NOTES SUR 10
    ================================================== */
 
 function createRatingCards() {
@@ -659,9 +725,7 @@ function createRatingCards() {
 
     card.innerHTML = `
       <div class="rating-top">
-        <span class="rating-name">
-          ${escapeHTML(student.name)}
-        </span>
+        <span class="rating-name">${escapeHTML(student.name)}</span>
         <div class="rating-score">
           <span>⭐</span>
           <input
@@ -687,14 +751,13 @@ function createRatingCards() {
   });
 }
 
-
 async function loadRatings() {
-  if (!ratingsContainer || !currentPlayer || !currentPrime) return;
+  if (!ratingsContainer || !currentUser || !currentPrime) return;
 
   const { data, error } = await supabaseClient
     .from("ratings")
     .select("*")
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime);
 
   if (error) {
@@ -716,17 +779,15 @@ async function loadRatings() {
   });
 }
 
-
 if (saveRatingsButton) {
   saveRatingsButton.addEventListener("click", saveRatings);
 }
 
-
 async function saveRatings() {
   const message = document.getElementById("ratingsMessage");
 
-  if (!currentPlayer || !currentPrime) {
-    showMessage(message, "❌ Choisis un profil et un Prime.");
+  if (!currentUser || !currentPrime || !currentPlayer) {
+    showMessage(message, "❌ Connecte-toi et ouvre un Prime.");
     return;
   }
 
@@ -744,10 +805,7 @@ async function saveRatings() {
     const value = input?.value;
 
     if (value === "" || value === undefined) {
-      showMessage(
-        message,
-        "❌ Note chaque candidat sur 10 avant d'enregistrer."
-      );
+      showMessage(message, "❌ Note chaque candidat sur 10 avant d'enregistrer.");
       input?.focus();
       return;
     }
@@ -755,15 +813,13 @@ async function saveRatings() {
     const rating = Number(value);
 
     if (!Number.isInteger(rating) || rating < 0 || rating > 10) {
-      showMessage(
-        message,
-        "❌ Les notes doivent être des nombres entiers de 0 à 10."
-      );
+      showMessage(message, "❌ Les notes doivent être des nombres entiers de 0 à 10.");
       input?.focus();
       return;
     }
 
     rows.push({
+      user_id: currentUser.id,
       player_name: currentPlayer,
       prime_number: currentPrime,
       student_id: student.id,
@@ -779,11 +835,19 @@ async function saveRatings() {
 
   showMessage(message, "Enregistrement...");
 
-  const { error } = await supabaseClient
+  const { error: deleteError } = await supabaseClient
     .from("ratings")
-    .upsert(rows, {
-      onConflict: "player_name,prime_number,student_id"
-    });
+    .delete()
+    .eq("user_id", currentUser.id)
+    .eq("prime_number", currentPrime);
+
+  if (deleteError) {
+    console.error("Erreur remplacement notes :", deleteError);
+    showMessage(message, "❌ Impossible d'enregistrer les notes.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from("ratings").insert(rows);
 
   if (error) {
     console.error("Erreur enregistrement notes :", error);
@@ -797,7 +861,7 @@ async function saveRatings() {
 
 
 /* ==================================================
-   16. CATÉGORIES
+   15. CATÉGORIES
    ================================================== */
 
 function createCategoryCards() {
@@ -811,10 +875,7 @@ function createCategoryCards() {
 
     card.innerHTML = `
       <h4>${category.title}</h4>
-      <select
-        class="category-select"
-        data-category="${category.id}"
-      >
+      <select class="category-select" data-category="${category.id}">
         <option value="">Choisir...</option>
       </select>
     `;
@@ -832,14 +893,13 @@ function createCategoryCards() {
   });
 }
 
-
 async function loadCategories() {
-  if (!categoriesContainer || !currentPlayer || !currentPrime) return;
+  if (!categoriesContainer || !currentUser || !currentPrime) return;
 
   const { data, error } = await supabaseClient
     .from("categories")
     .select("*")
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime);
 
   if (error) {
@@ -852,23 +912,19 @@ async function loadCategories() {
       `.category-select[data-category="${item.category}"]`
     );
 
-    if (select) {
-      select.value = String(item.student_id);
-    }
+    if (select) select.value = String(item.student_id);
   });
 }
-
 
 if (saveCategoriesButton) {
   saveCategoriesButton.addEventListener("click", saveCategories);
 }
 
-
 async function saveCategories() {
   const message = document.getElementById("categoriesMessage");
 
-  if (!currentPlayer || !currentPrime) {
-    showMessage(message, "❌ Choisis un profil et un Prime.");
+  if (!currentUser || !currentPrime || !currentPlayer) {
+    showMessage(message, "❌ Connecte-toi et ouvre un Prime.");
     return;
   }
 
@@ -878,6 +934,7 @@ async function saveCategories() {
     if (!select.value) return;
 
     rows.push({
+      user_id: currentUser.id,
       player_name: currentPlayer,
       prime_number: currentPrime,
       category: select.dataset.category,
@@ -890,7 +947,7 @@ async function saveCategories() {
   const { error: deleteError } = await supabaseClient
     .from("categories")
     .delete()
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime);
 
   if (deleteError) {
@@ -900,9 +957,7 @@ async function saveCategories() {
   }
 
   if (rows.length > 0) {
-    const { error } = await supabaseClient
-      .from("categories")
-      .insert(rows);
+    const { error } = await supabaseClient.from("categories").insert(rows);
 
     if (error) {
       console.error("Erreur enregistrement catégories :", error);
@@ -917,7 +972,7 @@ async function saveCategories() {
 
 
 /* ==================================================
-   17. TOP 5
+   16. TOP 5
    ================================================== */
 
 function createTopFive() {
@@ -949,14 +1004,13 @@ function createTopFive() {
   }
 }
 
-
 async function loadTopFive() {
-  if (!topFiveContainer || !currentPlayer || !currentPrime) return;
+  if (!topFiveContainer || !currentUser || !currentPrime) return;
 
   const { data, error } = await supabaseClient
     .from("top5")
     .select("*")
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime)
     .order("position", { ascending: true });
 
@@ -970,23 +1024,19 @@ async function loadTopFive() {
       `.top-five-select[data-position="${item.position}"]`
     );
 
-    if (select) {
-      select.value = String(item.student_id);
-    }
+    if (select) select.value = String(item.student_id);
   });
 }
-
 
 if (saveTopFiveButton) {
   saveTopFiveButton.addEventListener("click", saveTopFive);
 }
 
-
 async function saveTopFive() {
   const message = document.getElementById("topFiveMessage");
 
-  if (!currentPlayer || !currentPrime) {
-    showMessage(message, "❌ Choisis un profil et un Prime.");
+  if (!currentUser || !currentPrime || !currentPlayer) {
+    showMessage(message, "❌ Connecte-toi et ouvre un Prime.");
     return;
   }
 
@@ -995,10 +1045,7 @@ async function saveTopFive() {
   );
 
   if (students.length < 5) {
-    showMessage(
-      message,
-      "❌ Il faut au moins 5 candidats pour créer un Top 5."
-    );
+    showMessage(message, "❌ Il faut au moins 5 candidats pour créer un Top 5.");
     return;
   }
 
@@ -1011,20 +1058,25 @@ async function saveTopFive() {
     }
 
     if (chosen.includes(select.value)) {
-      showMessage(
-        message,
-        "❌ Un candidat ne peut apparaître qu'une seule fois."
-      );
+      showMessage(message, "❌ Un candidat ne peut apparaître qu'une seule fois.");
       return;
     }
 
     chosen.push(select.value);
   }
 
+  const rows = selects.map(select => ({
+    user_id: currentUser.id,
+    player_name: currentPlayer,
+    prime_number: currentPrime,
+    position: Number(select.dataset.position),
+    student_id: Number(select.value)
+  }));
+
   const { error: deleteError } = await supabaseClient
     .from("top5")
     .delete()
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime);
 
   if (deleteError) {
@@ -1033,16 +1085,7 @@ async function saveTopFive() {
     return;
   }
 
-  const rows = selects.map(select => ({
-    player_name: currentPlayer,
-    prime_number: currentPrime,
-    position: Number(select.dataset.position),
-    student_id: Number(select.value)
-  }));
-
-  const { error } = await supabaseClient
-    .from("top5")
-    .insert(rows);
+  const { error } = await supabaseClient.from("top5").insert(rows);
 
   if (error) {
     console.error("Erreur enregistrement Top 5 :", error);
@@ -1056,36 +1099,64 @@ async function saveTopFive() {
 
 
 /* ==================================================
-   18. NOTE FINALE DU PRIME
+   17. IDENTIFIANT TECHNIQUE POUR LA NOTE FINALE
    ================================================== */
 
-function resetPrimeFinalRating() {
-  if (primeFinalRating) {
-    primeFinalRating.value = "";
+// L'ancienne table players est encore utilisée ici car
+// prime_ratings.student_id est actuellement obligatoire.
+// Cet identifiant technique n'est pas l'identifiant du compte.
+
+async function getCurrentPlayerId() {
+  if (!currentPlayer) return null;
+
+  if (currentLegacyPlayerId) return currentLegacyPlayerId;
+
+  const { data: existing, error: searchError } = await supabaseClient
+    .from("players")
+    .select("id")
+    .eq("name", currentPlayer)
+    .limit(1)
+    .maybeSingle();
+
+  if (searchError) {
+    console.error("Erreur lecture identifiant technique :", searchError);
+    return null;
   }
 
-  if (primeFinalComment) {
-    primeFinalComment.value = "";
+  if (existing) {
+    currentLegacyPlayerId = existing.id;
+    return existing.id;
   }
 
-  showMessage(primeRatingMessage, "");
+  const { data: created, error: insertError } = await supabaseClient
+    .from("players")
+    .insert({ name: currentPlayer })
+    .select("id")
+    .single();
+
+  if (insertError) {
+    console.error("Erreur création identifiant technique :", insertError);
+    return null;
+  }
+
+  currentLegacyPlayerId = created.id;
+  return created.id;
 }
 
 
+/* ==================================================
+   18. NOTE FINALE DU PRIME
+   ================================================== */
+
 async function loadPrimeFinalRating() {
-  if (
-    !primeFinalRating ||
-    !primeFinalComment ||
-    !currentPlayer ||
-    !currentPrime
-  ) {
+  if (!primeFinalRating || !primeFinalComment || !currentUser || !currentPrime) {
     return;
   }
 
   const { data, error } = await supabaseClient
     .from("prime_ratings")
     .select("*")
-    .eq("player_name", currentPlayer)
+    .eq("user_id", currentUser.id)
     .eq("prime_number", currentPrime)
     .maybeSingle();
 
@@ -1100,25 +1171,20 @@ async function loadPrimeFinalRating() {
   primeFinalComment.value = data.comment ?? "";
 }
 
-
 if (savePrimeRatingButton) {
   savePrimeRatingButton.addEventListener("click", savePrimeFinalRating);
 }
 
-
 async function savePrimeFinalRating() {
-  if (!currentPlayer || !currentPrime) {
-    showMessage(primeRatingMessage, "❌ Choisis un profil et un Prime.");
+  if (!currentUser || !currentPrime || !currentPlayer) {
+    showMessage(primeRatingMessage, "❌ Connecte-toi et ouvre un Prime.");
     return;
   }
 
   const value = primeFinalRating?.value;
 
   if (value === "" || value === undefined) {
-    showMessage(
-      primeRatingMessage,
-      "❌ Donne une note comprise entre 0 et 10."
-    );
+    showMessage(primeRatingMessage, "❌ Donne une note comprise entre 0 et 10.");
     primeFinalRating?.focus();
     return;
   }
@@ -1126,36 +1192,51 @@ async function savePrimeFinalRating() {
   const rating = Number(value);
 
   if (!Number.isInteger(rating) || rating < 0 || rating > 10) {
+    showMessage(primeRatingMessage, "❌ La note doit être un nombre entier de 0 à 10.");
+    primeFinalRating?.focus();
+    return;
+  }
+
+  const legacyId = await getCurrentPlayerId();
+
+  if (legacyId === null) {
     showMessage(
       primeRatingMessage,
-      "❌ La note doit être un nombre entier de 0 à 10."
+      "❌ Impossible de préparer l'enregistrement. Réessaie."
     );
-    primeFinalRating?.focus();
     return;
   }
 
   showMessage(primeRatingMessage, "Enregistrement...");
 
   const row = {
+    user_id: currentUser.id,
     player_name: currentPlayer,
     prime_number: currentPrime,
-    student_id: getCurrentPlayerId(),
+    student_id: legacyId,
     rating,
     comment: primeFinalComment?.value.trim() || null
   };
 
+  const { error: deleteError } = await supabaseClient
+    .from("prime_ratings")
+    .delete()
+    .eq("user_id", currentUser.id)
+    .eq("prime_number", currentPrime);
+
+  if (deleteError) {
+    console.error("Erreur remplacement note finale :", deleteError);
+    showMessage(primeRatingMessage, "❌ Impossible d'enregistrer ta note.");
+    return;
+  }
+
   const { error } = await supabaseClient
     .from("prime_ratings")
-    .upsert(row, {
-      onConflict: "player_name,prime_number,student_id"
-    });
+    .insert(row);
 
   if (error) {
     console.error("Erreur enregistrement note finale :", error);
-    showMessage(
-      primeRatingMessage,
-      "❌ Impossible d'enregistrer ta note."
-    );
+    showMessage(primeRatingMessage, "❌ Impossible d'enregistrer ta note.");
     return;
   }
 
@@ -1165,21 +1246,13 @@ async function savePrimeFinalRating() {
 
 
 /* ==================================================
-   19. ID DU PROFIL ACTUEL
-   ================================================== */
-
-function getCurrentPlayerId() {
-  const player = players.find(item => item.name === currentPlayer);
-  return player?.id || null;
-}
-
-
-/* ==================================================
-   20. HISTORIQUE
+   19. HISTORIQUE PERSONNEL
    ================================================== */
 
 async function loadMyResults() {
-  if (!currentPlayer || !myResults) return;
+  if (!currentUser || !myResults) return;
+
+  const userId = currentUser.id;
 
   const [
     predictionsResult,
@@ -1189,19 +1262,19 @@ async function loadMyResults() {
     supabaseClient
       .from("predictions")
       .select("prime_number")
-      .eq("player_name", currentPlayer)
+      .eq("user_id", userId)
       .order("prime_number", { ascending: true }),
 
     supabaseClient
       .from("ratings")
       .select("prime_number,rating")
-      .eq("player_name", currentPlayer)
+      .eq("user_id", userId)
       .order("prime_number", { ascending: true }),
 
     supabaseClient
       .from("prime_ratings")
       .select("prime_number,rating,comment")
-      .eq("player_name", currentPlayer)
+      .eq("user_id", userId)
       .order("prime_number", { ascending: true })
   ]);
 
@@ -1236,9 +1309,7 @@ async function loadMyResults() {
   myResults.innerHTML = "";
 
   if (primeNumbers.size === 0) {
-    myResults.innerHTML = `
-      <p>Aucun Prime enregistré pour le moment.</p>
-    `;
+    myResults.innerHTML = `<p>Aucun Prime enregistré pour le moment.</p>`;
     return;
   }
 
@@ -1280,28 +1351,48 @@ async function loadMyResults() {
 
 
 /* ==================================================
-   21. INITIALISATION
+   20. INITIALISATION
    ================================================== */
 
 async function init() {
   createPrimes();
+  updateAuthDisplay();
 
-  await loadPlayers();
+  // Charge la liste partagée des candidats.
   await loadStudents();
+
+  // Restaure la session si la personne était déjà connectée.
+  const { data, error } = await supabaseClient.auth.getSession();
+
+  if (error) {
+    console.error("Erreur récupération session :", error);
+    showMessage(authMessage, "Impossible de vérifier la session.");
+    return;
+  }
+
+  if (data.session?.user) {
+    await handleAuthenticatedUser(data.session.user);
+  } else {
+    currentUser = null;
+    updateAuthDisplay();
+  }
+
+  // Suit les connexions et déconnexions.
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+      currentUser = null;
+      clearPersonalScreen();
+      updateAuthDisplay();
+      return;
+    }
+
+    if (event === "SIGNED_IN" && session?.user) {
+      // Le traitement asynchrone est lancé hors du callback Auth.
+      setTimeout(() => {
+        handleAuthenticatedUser(session.user);
+      }, 0);
+    }
+  });
 }
 
 init();
-
-
-/* ==================================================
-   22. ACTUALISATION AUTOMATIQUE
-   ================================================== */
-
-setInterval(async () => {
-  await loadPlayers();
-  await loadStudents();
-
-  if (currentPlayer) {
-    await loadMyResults();
-  }
-}, 10000);
