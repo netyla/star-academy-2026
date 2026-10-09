@@ -389,17 +389,18 @@ if (addProfileButton) {
           });
 
 
-      if (error) {
+     
+if (error) {
 
-        console.error(error);
+  console.error("Erreur ajout profil :", error);
 
-        alert(
-          "Impossible d'ajouter ce profil."
-        );
+  alert(
+    "Erreur : " + error.message
+  );
 
-        return;
+  return;
 
-      }
+}
 
 
       await loadPlayers();
