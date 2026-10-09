@@ -286,6 +286,21 @@ function displayPlayers() {
         button
       );
 
+       
+      const deleteButton = document.createElement("button");
+
+      deleteButton.type = "button";
+      deleteButton.textContent = "×";
+      deleteButton.className = "delete-player-button";
+      deleteButton.title = "Supprimer ce profil";
+
+      deleteButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        deletePlayer(player.id, player.name);
+      });
+
+      playersContainer.appendChild(deleteButton);
+
     }
   );
 
