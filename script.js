@@ -408,6 +408,42 @@ async function deletePlayer(id, name) {
   await loadPlayers();
 }
 ```
+```js
+async function deletePlayer(id, name) {
+  if (!confirm(`Supprimer le profil "${name}" ?`)) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("players")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Erreur suppression profil :", error);
+    alert("Impossible de supprimer ce profil : " + error.message);
+    return;
+  }
+
+  if (currentPlayer === name) {
+    currentPlayer = null;
+
+    if (selectedPlayer) {
+      selectedPlayer.textContent = "";
+    }
+
+    if (myResults) {
+      myResults.innerHTML = "";
+    }
+
+    if (primeSpace) {
+      primeSpace.classList.add("hidden");
+    }
+  }
+
+  await loadPlayers();
+}
+```
 
 
 /* ==================================================
