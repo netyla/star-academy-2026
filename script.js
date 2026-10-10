@@ -1414,3 +1414,411 @@ async function init() {
 }
 
 init();
+
+
+/* ==================================================
+   GROUPE PRIVÉ — STAR ACADEMY
+   ================================================== */
+
+function showGroupMessage(message, isError = false) {
+  if (!groupMessage) return;
+
+  groupMessage.textContent = message;
+  groupMessage.style.color = isError ? "#c0395b" : "";
+}
+
+function groupEscapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function getRpcRow(data) {
+  return Array.isArray(data) ? data[0] : data;
+}
+
+/* Rattacher les anciennes réponses de la personne
+   à son nouveau groupe, sans supprimer aucune ligne. */
+
+async function attachOldAnswersToSession(sessionId) {
+  const tables = [
+    "predictions",
+    "ratings",
+    "categories",
+    "top5",
+    "prime_ratings"
+  ];
+
+  for (const table of tables) {
+    const { error } = await supabaseClient
+      .from(table)
+      .update({ session_id: sessionId })
+      .eq("user_id", currentUser.id)
+      .is("session_id", null);
+
+    if (error) {
+      console.error(
+        "Erreur de rattachement dans " + table,
+        error
+      );
+      throw new Error(
+        "Le groupe est créé, mais le rattachement des anciennes réponses a échoué dans " + table + "."
+      );
+    }
+  }
+}
+
+/* CRÉER UN GROUPE */
+
+if (createGroupForm) {
+  createGroupForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!currentUser) {
+      showGroupMessage("Connecte-toi avant de créer un groupe.", true);
+      return;
+    }
+
+    const name = groupNameInput.value.trim();
+
+    if (!name || name.length > 60) {
+      showGroupMessage("Choisis un nom de groupe de 1 à 60 caractères.", true);
+      return;
+    }
+
+    const submitButton = createGroupForm.querySelector(
+      'button[type="submit"]'
+    );
+
+    submitButton.disabled = true;
+    showGroupMessage("Création du groupe en cours…");
+
+    try {
+      const { data, error } = await supabaseClient.rpc(
+        "create_private_session",
+        { _name: name }
+      );
+
+      if (error) throw error;
+
+      const session = getRpcRow(data);
+
+      if (!session || !session.session_id) {
+        throw new Error("Supabase n'a pas renvoyé les informations du groupe.");
+      }
+
+      currentSession = session;
+      currentSessionRole = "owner";
+
+      await attachOldAnswersToSession(session.session_id);
+
+      await loadCurrentGroup();
+
+      showGroupMessage(
+        "Groupe créé ! Tu peux partager le code d'invitation avec tes amis."
+      );
+    } catch (error) {
+      console.error("Création du groupe :", error);
+      showGroupMessage(
+        error.message || "Impossible de créer le groupe.",
+        true
+      );
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+
+/* REJOINDRE UN GROUPE */
+
+if (joinGroupForm) {
+  joinGroupForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!currentUser) {
+      showGroupMessage("Connecte-toi avant de rejoindre un groupe.", true);
+      return;
+    }
+
+    const code = groupCodeInput.value.trim();
+
+    if (!code) {
+      showGroupMessage("Saisis le code d'invitation.", true);
+      return;
+    }
+
+    const submitButton = joinGroupForm.querySelector(
+      'button[type="submit"]'
+    );
+
+    submitButton.disabled = true;
+    showGroupMessage("Envoi de ta demande…");
+
+    try {
+      const { data, error } = await supabaseClient.rpc(
+        "join_private_session",
+        { _code: code }
+      );
+
+      if (error) throw error;
+
+      const result = getRpcRow(data);
+
+      if (!result || !result.session_id) {
+        throw new Error("La réponse du serveur est incomplète.");
+      }
+
+      groupCodeInput.value = "";
+
+      showGroupMessage(
+        "Demande envoyée ! Tu pourras accéder au groupe après validation par son créateur."
+      );
+    } catch (error) {
+      console.error("Demande pour rejoindre :", error);
+      showGroupMessage(
+        "Impossible d'envoyer la demande. Vérifie le code et réessaie.",
+        true
+      );
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+
+/* COPIER LE CODE D'INVITATION */
+
+if (copyGroupCodeButton) {
+  copyGroupCodeButton.addEventListener("click", async () => {
+    const code = currentSession?.code;
+
+    if (!code) {
+      showGroupMessage(
+        "Le code n'est pas disponible ici. Il sera affiché lors de la création du groupe.",
+        true
+      );
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(code);
+      showGroupMessage("Code copié !");
+    } catch (error) {
+      showGroupMessage("Copie impossible. Sélectionne le code pour le copier.", true);
+    }
+  });
+}
+
+/* CHARGER LE GROUPE ACTUEL */
+
+async function loadCurrentGroup() {
+  if (!currentUser || !groupPanel) return;
+
+  const { data: memberships, error: membershipError } =
+    await supabaseClient
+      .from("session_members")
+      .select("session_id, role, status, created_at")
+      .eq("user_id", currentUser.id)
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+  if (membershipError) {
+    console.error("Chargement des membres :", membershipError);
+    showGroupMessage("Impossible de charger ton groupe.", true);
+    return;
+  }
+
+  const membership = memberships?.[0];
+
+  if (!membership) {
+    currentSession = null;
+    currentSessionRole = null;
+
+    currentGroupInfo?.classList.add("hidden");
+    createGroupForm?.classList.remove("hidden");
+    joinGroupForm?.classList.remove("hidden");
+    groupResponses?.classList.add("hidden");
+    return;
+  }
+
+  const { data: session, error: sessionError } =
+    await supabaseClient
+      .from("sessions")
+      .select("id, name, code, created_by")
+      .eq("id", membership.session_id)
+      .single();
+
+  if (sessionError) {
+    console.error("Chargement du groupe :", sessionError);
+    showGroupMessage("Impossible de récupérer les informations du groupe.", true);
+    return;
+  }
+
+  currentSession = session;
+  currentSessionRole = membership.role;
+
+  if (currentGroupName) {
+    currentGroupName.textContent = session.name;
+  }
+
+  if (currentGroupCode) {
+    currentGroupCode.textContent =
+      membership.role === "owner" ? session.code : "Réservé au créateur";
+  }
+
+  currentGroupInfo?.classList.remove("hidden");
+  createGroupForm?.classList.add("hidden");
+  joinGroupForm?.classList.add("hidden");
+
+  await loadGroupMembers();
+}
+
+/* AFFICHER LES MEMBRES ET LES DEMANDES */
+
+async function loadGroupMembers() {
+  if (!currentSession || !groupMembers) return;
+
+  const { data: members, error } = await supabaseClient
+    .from("session_members")
+    .select("user_id, role, status")
+    .eq("session_id", currentSession.id)
+    .eq("status", "approved");
+
+  if (error) {
+    console.error("Liste des membres :", error);
+    groupMembers.textContent = "Impossible de charger les membres.";
+    return;
+  }
+
+  groupMembers.innerHTML = (members || []).map(member => {
+    const isMe = member.user_id === currentUser.id;
+    const label = isMe
+      ? "Toi"
+      : "Membre " + member.user_id.slice(0, 6);
+
+    const roleLabel = member.role === "owner"
+      ? "Créateur"
+      : "Membre";
+
+    return `
+      <p>
+        <strong>${groupEscapeHtml(label)}</strong>
+        — ${roleLabel}
+      </p>
+    `;
+  }).join("") || "<p>Aucun membre pour le moment.</p>";
+
+  const isOwner = currentSessionRole === "owner";
+
+  if (!isOwner) {
+    pendingRequestsArea?.classList.add("hidden");
+    return;
+  }
+
+  pendingRequestsArea?.classList.remove("hidden");
+
+  const { data: requests, error: requestsError } =
+    await supabaseClient.rpc(
+      "get_pending_session_requests",
+      { _session_id: currentSession.id }
+    );
+
+  if (requestsError) {
+    console.error("Demandes en attente :", requestsError);
+    pendingRequests.textContent = "Impossible de charger les demandes.";
+    return;
+  }
+
+  if (!requests || requests.length === 0) {
+    pendingRequests.innerHTML = "<p>Aucune demande en attente.</p>";
+    return;
+  }
+
+  pendingRequests.innerHTML = requests.map(request => `
+    <div class="group-request">
+      <p>
+        <strong>${groupEscapeHtml(request.request_name || "Nouveau membre")}</strong>
+      </p>
+      <button
+        type="button"
+        data-group-action="approve"
+        data-user-id="${groupEscapeHtml(request.request_user_id)}"
+      >
+        Accepter
+      </button>
+      <button
+        type="button"
+        data-group-action="reject"
+        data-user-id="${groupEscapeHtml(request.request_user_id)}"
+      >
+        Refuser
+      </button>
+    </div>
+  `).join("");
+}
+
+/* ACCEPTER OU REFUSER UNE DEMANDE */
+
+if (pendingRequests) {
+  pendingRequests.addEventListener("click", async event => {
+    const button = event.target.closest("button[data-group-action]");
+
+    if (!button || !currentSession || currentSessionRole !== "owner") {
+      return;
+    }
+
+    const userId = button.dataset.userId;
+    const action = button.dataset.groupAction;
+
+    button.disabled = true;
+
+    try {
+      const functionName = action === "approve"
+        ? "approve_session_member"
+        : "reject_session_member";
+
+      const { error } = await supabaseClient.rpc(functionName, {
+        _session_id: currentSession.id,
+        _user_id: userId
+      });
+
+      if (error) throw error;
+
+      showGroupMessage(
+        action === "approve"
+          ? "Membre accepté !"
+          : "Demande refusée."
+      );
+
+      await loadGroupMembers();
+    } catch (error) {
+      console.error("Gestion de la demande :", error);
+      showGroupMessage(
+        "Impossible de traiter cette demande. Vérifie les droits Supabase.",
+        true
+      );
+      button.disabled = false;
+    }
+  });
+}
+
+/* INITIALISER LE GROUPE APRÈS CONNEXION */
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (!session?.user) {
+    currentSession = null;
+    currentSessionRole = null;
+    return;
+  }
+
+  if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+    setTimeout(() => {
+      loadCurrentGroup();
+    }, 0);
+  }
+});
+
