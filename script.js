@@ -66,6 +66,24 @@ const authForms = document.getElementById("authForms");
 const loggedInArea = document.getElementById("loggedInArea");
 const loggedInEmail = document.getElementById("loggedInEmail");
 
+// ÉLÉMENTS DU GROUPE PRIVÉ
+const groupPanel = document.getElementById("groupPanel");
+const currentGroupInfo = document.getElementById("currentGroupInfo");
+const currentGroupName = document.getElementById("currentGroupName");
+const currentGroupCode = document.getElementById("currentGroupCode");
+const copyGroupCodeButton = document.getElementById("copyGroupCodeButton");
+const groupMembers = document.getElementById("groupMembers");
+const pendingRequestsArea = document.getElementById("pendingRequestsArea");
+const pendingRequests = document.getElementById("pendingRequests");
+const createGroupForm = document.getElementById("createGroupForm");
+const groupNameInput = document.getElementById("groupNameInput");
+const joinGroupForm = document.getElementById("joinGroupForm");
+const groupCodeInput = document.getElementById("groupCodeInput");
+const groupMessage = document.getElementById("groupMessage");
+
+const groupResponses = document.getElementById("groupResponses");
+const groupResponsesContent = document.getElementById("groupResponsesContent");
+
 // Anciens profils : conservés uniquement pour compatibilité
 const playersContainer = document.getElementById("players");
 const selectedPlayer = document.getElementById("selectedPlayer");
