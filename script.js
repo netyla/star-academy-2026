@@ -1616,6 +1616,7 @@ if (copyGroupCodeButton) {
 
 /* CHARGER LE GROUPE ACTUEL */
 
+
 async function loadCurrentGroup() {
   if (!currentUser || !groupPanel) return;
 
@@ -1633,6 +1634,69 @@ async function loadCurrentGroup() {
     showGroupMessage("Impossible de charger ton groupe.", true);
     return;
   }
+
+  const membership = memberships?.[0];
+
+  if (!membership) {
+    currentSession = null;
+    currentSessionRole = null;
+
+    currentGroupInfo?.classList.add("hidden");
+    createGroupForm?.classList.remove("hidden");
+    joinGroupForm?.classList.remove("hidden");
+    groupResponses?.classList.add("hidden");
+
+    if (groupMembers) groupMembers.innerHTML = "";
+    if (pendingRequests) pendingRequests.innerHTML = "";
+
+    return;
+  }
+
+  const { data: session, error: sessionError } =
+    await supabaseClient
+      .from("sessions")
+      .select("id, name, code, created_by")
+      .eq("id", membership.session_id)
+      .single();
+
+  if (sessionError) {
+    console.error("Chargement du groupe :", sessionError);
+    showGroupMessage(
+      "Impossible de récupérer les informations du groupe.",
+      true
+    );
+    return;
+  }
+
+  currentSession = session;
+  currentSessionRole = membership.role;
+
+  if (currentGroupName) {
+    currentGroupName.textContent = session.name;
+  }
+
+  if (currentGroupCode) {
+    currentGroupCode.textContent =
+      membership.role === "owner"
+        ? session.code
+        : "Réservé au créateur";
+  }
+
+  currentGroupInfo?.classList.remove("hidden");
+  createGroupForm?.classList.add("hidden");
+  joinGroupForm?.classList.add("hidden");
+
+  await loadGroupMembers();
+
+  if (typeof loadPendingRequests === "function") {
+    await loadPendingRequests();
+  }
+
+  if (typeof loadGroupResponses === "function") {
+    await loadGroupResponses();
+  }
+}
+
 
   const membership = memberships?.[0];
 
