@@ -45,6 +45,8 @@ const categories = [
    ================================================== */
 
 let currentUser = null;
+let currentSession = null;
+let currentSessionRole = null;
 let currentPlayer = null;
 let currentPrime = null;
 let currentLegacyPlayerId = null;
