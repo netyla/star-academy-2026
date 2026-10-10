@@ -1,687 +1,377 @@
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Star Academy — Notre saison</title>
-  <meta
-    name="description"
-    content="Retrouve tes pronostics, tes notes, tes favoris et tes souvenirs de la saison Star Academy 2026."
-  >
+  <meta name="theme-color" content="#f8e8f0">
+  <meta name="description" content="Notre carnet de saison Star Academy 2026 : pronostics, avis et souvenirs entre amis.">
+  <title>Star Academy 2026 — Notre saison</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .hidden { display: none !important; }
+    .section { padding: 36px 20px; }
+    .section-heading { text-align: center; max-width: 760px; margin: 0 auto 28px; }
+    .eyebrow { letter-spacing: 2px; font-size: .75rem; font-weight: 700; }
+    .form-card { max-width: 620px; margin: 20px auto; padding: 22px; border-radius: 18px; background: #fff; }
+    .form-card label { display: block; margin: 12px 0 6px; }
+    .form-card input, .form-card select, .form-card textarea,
+    .subsection input, .subsection select, .subsection textarea {
+      box-sizing: border-box; width: 100%; padding: 12px; margin-bottom: 12px;
+      border: 1px solid #e6dce2; border-radius: 10px; font: inherit;
+    }
+    .form-card button, section button, .section button {
+      cursor: pointer; font: inherit;
+    }
+    .message { margin: 14px auto; max-width: 620px; }
+    .subsection { max-width: 900px; margin: 28px auto; padding: 22px; border-radius: 18px; background: #fff; }
+    .subsection-title { display: flex; gap: 12px; align-items: center; }
+    .subsection-title p { margin: 0; font-size: .72rem; letter-spacing: 1.5px; }
+    .subsection-title h3 { margin: 4px 0; }
+    .field-group { margin: 16px 0; }
+    .field-group label { display: block; margin-bottom: 6px; }
+    .prime-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+    .prime-card { padding: 18px 12px; border-radius: 14px; border: 1px solid #eadce4; background: #fff; }
+    .candidate-row, .result-row, .member-row, .request-row { padding: 12px; margin: 8px 0; border-radius: 12px; background: #fff8fb; }
+    .site-header { padding: 18px 20px; }
+    .site-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .site-nav a { text-decoration: none; }
+    .hero { text-align: center; padding: 54px 20px; }
+    .hero h1 { font-family: "Playfair Display", serif; }
+    .site-footer { text-align: center; padding: 28px 16px; }
+    @media (max-width: 600px) {
+      .section { padding: 26px 14px; }
+      .subsection, .form-card { padding: 16px; }
+      .site-nav { gap: 10px; font-size: .85rem; }
+    }
+  </style>
 </head>
 
 <body>
+  <header class="site-header">
+    <a href="#accueil" class="site-logo" aria-label="Accueil Star Academy">
+      STAR ACADEMY <span>2026</span>
+    </a>
 
-  <!-- ==================================================
-       HEADER
-       ================================================== -->
-
-  <header class="header">
-
-    <div class="logo">
-      <span>STAR</span>
-      <strong>ACADEMY</strong>
-    </div>
-
-    <button
-      class="menu-button"
-      id="menuButton"
-      type="button"
-      aria-label="Ouvrir le menu"
-      aria-controls="nav"
-      aria-expanded="false"
-    >
-      ☰
-    </button>
-
-    <nav id="nav" aria-label="Navigation principale">
+    <nav class="site-nav" aria-label="Navigation principale">
       <a href="#accueil">Accueil</a>
-      <a href="#connexion">Mon compte</a>
+      <a href="#compte">Mon compte</a>
+      <a href="#groupPanel">Mon groupe</a>
       <a href="#profils">Profils</a>
       <a href="#candidats">Candidats</a>
       <a href="#primes">Les Primes</a>
-      <a href="#historique">Mes résultats</a>
+      <a href="#resultats">Mes résultats</a>
     </nav>
-
   </header>
 
-
   <main>
-
-    <!-- ==================================================
-         ACCUEIL
-         ================================================== -->
-
     <section id="accueil" class="hero">
-
-      <div class="hero-content">
-
-        <p class="small-title">SAISON 2026</p>
-
-        <h1>
-          Notre saison<br>
-          <span>Star Academy</span>
-        </h1>
-
-        <p class="hero-text">
-          Nos pronostics, nos avis, nos coups de cœur
-          et tous nos souvenirs de la saison.
-        </p>
-
-        <a href="#connexion" class="main-button">
-          Accéder à mon espace
-        </a>
-
-      </div>
-
+      <p class="eyebrow">SAISON 2026</p>
+      <h1>Notre saison<br>Star Academy</h1>
+      <p>Nos pronostics, nos coups de cœur et tous nos souvenirs de la saison, réunis au même endroit.</p>
+      <a href="#primes">Découvrir les primes</a>
     </section>
 
-
-    <!-- ==================================================
-         CONNEXION ET INSCRIPTION
-         ================================================== -->
-
-    <section id="connexion" class="player-section">
-
-      <div class="section-title">
-        <p>TON ESPACE PERSONNEL</p>
-        <h2>Bienvenue !</h2>
-        <span>
-          Connecte-toi pour retrouver tes pronostics,
-          tes notes et tes favoris.
-        </span>
+    <!-- COMPTE -->
+    <section id="compte" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">ESPACE PERSONNEL</p>
+        <h2>Mon compte</h2>
+        <p>Connecte-toi pour retrouver tes réponses et participer à la saison avec ton groupe.</p>
       </div>
-
-      <!-- Formulaires affichés lorsque personne n'est connecté -->
 
       <div id="authForms">
-
-        <form id="loginForm">
-
-          <h3>J’ai déjà un compte</h3>
-
+        <form id="loginForm" class="form-card">
+          <h3>J'ai déjà un compte</h3>
           <label for="loginEmail">Adresse e-mail</label>
-          <input
-            type="email"
-            id="loginEmail"
-            name="email"
-            autocomplete="email"
-            required
-          >
+          <input type="email" id="loginEmail" name="email" autocomplete="email" required>
 
           <label for="loginPassword">Mot de passe</label>
-          <input
-            type="password"
-            id="loginPassword"
-            name="password"
-            autocomplete="current-password"
-            required
-          >
+          <input type="password" id="loginPassword" name="password" autocomplete="current-password" required>
 
-          <button type="submit" class="main-button">
-            Me connecter
-          </button>
-
+          <button type="submit">Se connecter</button>
         </form>
 
-
-        <form id="signupForm">
-
+        <form id="signupForm" class="form-card">
           <h3>Créer mon compte</h3>
-
-          <label for="signupName">Mon prénom ou pseudo</label>
-          <input
-            type="text"
-            id="signupName"
-            name="name"
-            autocomplete="nickname"
-            maxlength="40"
-            required
-          >
+          <label for="signupName">Prénom ou pseudo</label>
+          <input type="text" id="signupName" name="name" autocomplete="nickname" maxlength="60" required>
 
           <label for="signupEmail">Adresse e-mail</label>
-          <input
-            type="email"
-            id="signupEmail"
-            name="email"
-            autocomplete="email"
-            required
-          >
+          <input type="email" id="signupEmail" name="email" autocomplete="email" required>
 
-          <label for="signupPassword">Choisir un mot de passe</label>
-          <input
-            type="password"
-            id="signupPassword"
-            name="password"
-            autocomplete="new-password"
-            minlength="6"
-            required
-          >
+          <label for="signupPassword">Mot de passe</label>
+          <input type="password" id="signupPassword" name="password" autocomplete="new-password" minlength="6" required>
 
-          <button type="submit" class="main-button">
-            Créer mon compte
-          </button>
-
+          <button type="submit">Créer mon compte</button>
         </form>
-
       </div>
 
-      <!-- Espace affiché lorsque l'utilisateur est connecté -->
-
-      <div id="loggedInArea" hidden>
-
-        <p>Tu es connecté(e) avec le compte :</p>
-
-        <p id="loggedInEmail"></p>
-
-        <button id="logoutButton" type="button">
-          Me déconnecter
-        </button>
-
+      <div id="loggedInArea" class="form-card hidden">
+        <h3>Bienvenue !</h3>
+        <p>Connecté(e) avec : <strong id="loggedInEmail"></strong></p>
+        <button type="button" id="logoutButton">Se déconnecter</button>
       </div>
 
-      <p
-        id="authMessage"
-        class="save-message"
-        role="status"
-        aria-live="polite"
-      ></p>
-
+      <p id="authMessage" class="message" role="status" aria-live="polite"></p>
     </section>
 
-
-    <!-- ==================================================
-         PROFILS
-         Conservé temporairement pour compatibilité
-         avec le script.js actuel.
-         ================================================== -->
-
-    <section id="profils" class="player-section">
-
-      <div class="section-title">
-
-        <p>QUI ES-TU ?</p>
-
-        <h2>Choisis ton profil</h2>
-
-        <span>
-          Chaque profil possède ses propres avis et pronostics.
-        </span>
-
+    <!-- GROUPE PRIVÉ -->
+    <section id="groupPanel" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">NOTRE PETIT GROUPE</p>
+        <h2>Nos pronostics entre amis</h2>
+        <p>Crée ton groupe privé ou demande à rejoindre celui d'une amie.</p>
       </div>
 
-      <div id="players" class="players"></div>
+      <p id="groupMessage" class="message hidden" role="status" aria-live="polite"></p>
 
-      <button
-        id="addProfileButton"
-        class="add-profile-button"
-        type="button"
-      >
-        + Ajouter un profil
-      </button>
+      <form id="createGroupForm" class="form-card">
+        <h3>Créer mon groupe</h3>
+        <label for="groupNameInput">Nom du groupe</label>
+        <input type="text" id="groupNameInput" name="groupName" maxlength="60" placeholder="Ex. : Notre saison Star Academy">
+        <button type="submit">Créer le groupe</button>
+      </form>
 
-      <p id="selectedPlayer" class="selected-player">
-        Aucun profil sélectionné
-      </p>
+      <form id="joinGroupForm" class="form-card">
+        <h3>Rejoindre un groupe</h3>
+        <label for="groupCodeInput">Code du groupe</label>
+        <input type="text" id="groupCodeInput" name="groupCode" autocomplete="off" placeholder="Entre le code reçu" required>
+        <button type="submit">Demander à rejoindre</button>
+      </form>
 
+      <div id="currentGroupInfo" class="form-card hidden">
+        <h3 id="currentGroupName">Mon groupe</h3>
+        <p>Code à transmettre à tes amies :</p>
+        <p><strong id="currentGroupCode"></strong></p>
+        <button type="button" id="copyGroupCodeButton">Copier le code</button>
+
+        <h3>Membres du groupe</h3>
+        <div id="groupMembers"></div>
+
+        <div id="pendingRequestsArea" class="hidden">
+          <h3>Demandes en attente</h3>
+          <div id="pendingRequests"></div>
+        </div>
+      </div>
     </section>
 
+    <!-- PROFILS -->
+    <section id="profils" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">ESPACE PERSONNEL</p>
+        <h2>Les profils</h2>
+        <p>Choisis le profil avec lequel tu souhaites consulter ton carnet de saison.</p>
+      </div>
 
-    <!-- ==================================================
-         CANDIDATS
-         ================================================== -->
+      <div id="players"></div>
+      <div class="form-card">
+        <label for="selectedPlayer">Profil sélectionné</label>
+        <select id="selectedPlayer">
+          <option value="">Choisir un profil</option>
+        </select>
+        <button type="button" id="addProfileButton">Ajouter un profil</button>
+      </div>
+    </section>
 
-    <section id="candidats" class="candidates-section">
-
-      <div class="section-title">
-
-        <p>SAISON 2026</p>
-
+    <!-- CANDIDATS -->
+    <section id="candidats" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">PROMOTION 2026</p>
         <h2>Les candidats</h2>
-
-        <span>
-          Retrouvez les candidats de la saison.
-        </span>
-
+        <p>Retrouve ici les élèves de la saison. Tu pourras ajouter leurs photos plus tard.</p>
       </div>
 
-      <div id="candidateList" class="candidate-list"></div>
+      <div id="candidateList"></div>
 
-      <div class="candidate-add">
-
-        <label for="candidateInput" class="visually-hidden">
-          Prénom du candidat
-        </label>
-
-        <input
-          type="text"
-          id="candidateInput"
-          placeholder="Prénom du candidat"
-          maxlength="40"
-        >
-
-        <button id="addCandidateButton" type="button">
-          Ajouter
-        </button>
-
-      </div>
-
+      <form id="candidateForm" class="form-card">
+        <label for="candidateInput">Nom du candidat</label>
+        <input type="text" id="candidateInput" maxlength="40" placeholder="Prénom du candidat">
+        <button type="button" id="addCandidateButton">Ajouter le candidat</button>
+      </form>
     </section>
 
-
-    <!-- ==================================================
-         LES 13 PRIMES
-         ================================================== -->
-
-    <section id="primes" class="primes-section">
-
-      <div class="section-title">
-
-        <p>STAR ACADEMY</p>
-
+    <!-- LES 13 PRIMES -->
+    <section id="primes" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">NOTRE CARNET DE SAISON</p>
         <h2>Les Primes</h2>
-
-        <span>
-          Choisis un Prime pour noter et donner ton avis.
-        </span>
-
+        <p>Pour chaque prime, note tes impressions et retrouve ensuite ce que tu avais prévu.</p>
       </div>
 
       <div id="primeGrid" class="prime-grid"></div>
-
     </section>
 
+    <!-- CONTENU D'UN PRIME -->
+    <section id="primeSpace" class="section hidden">
+      <button type="button" id="backToPrimes">← Retour aux primes</button>
 
-    <!-- ==================================================
-         ESPACE DÉTAILLÉ D'UN PRIME
-         ================================================== -->
-
-    <section id="primeSpace" class="prime-space hidden">
-
-      <div class="prediction-header">
-
-        <button
-          id="backToPrimes"
-          class="back-button"
-          type="button"
-        >
-          ← Retour aux Primes
-        </button>
-
-        <p id="primeNumber">PRIME 1</p>
-
-        <h2 id="primeTitle">Mon Prime</h2>
-
-        <p id="playerName"></p>
-
+      <div class="section-heading">
+        <p class="eyebrow">NOTRE CARNET DE SAISON</p>
+        <h2 id="primeTitle">Prime</h2>
+        <p>Profil actif : <strong id="playerName"></strong></p>
       </div>
 
-      
-<!-- RÉPONSES PARTAGÉES DU GROUPE -->
-
-<div id="groupResponses" class="subsection hidden">
-
-  <div class="subsection-title">
-    <span>👥</span>
-    <div>
-      <p>NOTRE GROUPE</p>
-      <h3>Les avis de tout le monde</h3>
-    </div>
-  </div>
-
-  <p>
-    Retrouve ici les pronostics, les notes et les avis
-    des membres acceptés dans ton groupe.
-  </p>
-
-  <div id="groupResponsesContent"></div>
-
-</div>
-
-
-      <!-- 01 — PRONOSTICS -->
-
+      <!-- PRONOSTICS -->
       <div class="subsection">
-
         <div class="subsection-title">
-
-          <span>01</span>
-
+          <span>🔮</span>
           <div>
-            <p>MES PRONOSTICS</p>
-            <h3>Qui va se démarquer ?</h3>
+            <p>AVANT OU APRÈS LE PRIME</p>
+            <h3>Mes pronostics</h3>
           </div>
-
         </div>
 
         <form id="predictionForm">
-
-          <div class="prediction-grid">
-
-            <div class="prediction-card">
-              <h4>⭐ Qui sera immunisé(e) ?</h4>
-              <select id="immunity">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
-            <div class="prediction-card">
-              <h4>🎤 Meilleur duo</h4>
-              <select id="bestDuo">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
-            <div class="prediction-card">
-              <h4>💫 Meilleure prestation</h4>
-              <select id="bestPerformance">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
-            <div class="prediction-card">
-              <h4>❤️ Ton coup de cœur</h4>
-              <select id="favorite">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
-            <div class="prediction-card">
-              <h4>🚪 Qui sera éliminé(e) ?</h4>
-              <select id="eliminated">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
-            <div class="prediction-card">
-              <h4>🏆 Qui pourrait gagner ?</h4>
-              <select id="winner">
-                <option value="">Choisir...</option>
-              </select>
-            </div>
-
+          <div class="field-group">
+            <label for="immunity">Qui sera immunisé(e) ?</label>
+            <select id="immunity"><option value="">Choisir un candidat</option></select>
           </div>
 
-          <button type="submit" class="save-button">
-            Enregistrer mes pronostics
-          </button>
+          <div class="field-group">
+            <label for="bestDuo">Le meilleur duo</label>
+            <select id="bestDuo"><option value="">Choisir un candidat ou un duo</option></select>
+          </div>
 
-          <p
-            id="saveMessage"
-            class="save-message"
-            role="status"
-            aria-live="polite"
-          ></p>
+          <div class="field-group">
+            <label for="bestPerformance">La meilleure prestation</label>
+            <select id="bestPerformance"><option value="">Choisir un candidat</option></select>
+          </div>
 
+          <div class="field-group">
+            <label for="favorite">Mon coup de cœur</label>
+            <select id="favorite"><option value="">Choisir un candidat</option></select>
+          </div>
+
+          <div id="eliminatedGroup" class="field-group">
+            <label for="eliminated">Qui risque de quitter l'aventure ?</label>
+            <select id="eliminated"><option value="">Choisir un candidat</option></select>
+          </div>
+
+          <div class="field-group">
+            <label for="winner">Qui pourrait gagner la saison ?</label>
+            <select id="winner"><option value="">Choisir un candidat</option></select>
+          </div>
+
+          <button type="submit">Enregistrer mes pronostics</button>
+          <p id="saveMessage" class="message" role="status" aria-live="polite"></p>
         </form>
-
       </div>
 
-
-      <!-- 02 — NOTES DES CANDIDATS -->
-
+      <!-- NOTES ET COMMENTAIRES -->
       <div class="subsection">
-
         <div class="subsection-title">
-
-          <span>02</span>
-
+          <span>⭐</span>
           <div>
-            <p>MES NOTES</p>
-            <h3>Mon avis sur chaque candidat</h3>
+            <p>MES IMPRESSIONS</p>
+            <h3>Mes notes et commentaires</h3>
           </div>
-
         </div>
-
-        <div id="ratingsContainer" class="ratings-container"></div>
-
-        <button
-          id="saveRatingsButton"
-          class="save-button"
-          type="button"
-        >
-          Enregistrer mes notes
-        </button>
-
-        <p
-          id="ratingsMessage"
-          class="save-message"
-          role="status"
-          aria-live="polite"
-        ></p>
-
+        <p>Note chaque candidat sur 10 et écris ce que tu as pensé de sa prestation.</p>
+        <div id="ratingsContainer"></div>
+        <button type="button" id="saveRatingsButton">Enregistrer mes notes</button>
+        <p id="ratingsMessage" class="message" role="status" aria-live="polite"></p>
       </div>
 
-
-      <!-- 03 — CATÉGORIES -->
-
+      <!-- CATÉGORIES -->
       <div class="subsection">
-
         <div class="subsection-title">
-
-          <span>03</span>
-
+          <span>💗</span>
           <div>
-            <p>MES CATÉGORIES</p>
-            <h3>Mes impressions du moment</h3>
+            <p>MES PETITS CLASSEMENTS</p>
+            <h3>Les catégories du prime</h3>
           </div>
-
         </div>
-
-        <div
-          id="categoriesContainer"
-          class="categories-container"
-        ></div>
-
-        <button
-          id="saveCategoriesButton"
-          class="save-button"
-          type="button"
-        >
-          Enregistrer mes catégories
-        </button>
-
-        <p
-          id="categoriesMessage"
-          class="save-message"
-          role="status"
-          aria-live="polite"
-        ></p>
-
+        <div id="categoriesContainer"></div>
+        <button type="button" id="saveCategoriesButton">Enregistrer mes choix</button>
+        <p id="categoriesMessage" class="message" role="status" aria-live="polite"></p>
       </div>
 
-
-      <!-- 04 — TOP 5 -->
-
+      <!-- TOP 5 -->
       <div class="subsection">
-
         <div class="subsection-title">
-
-          <span>04</span>
-
+          <span>🏆</span>
           <div>
-            <p>MON TOP 5</p>
-            <h3>Mes favoris du moment</h3>
+            <p>MON CLASSEMENT</p>
+            <h3>Mon Top 5</h3>
           </div>
-
         </div>
-
-        <div
-          id="topFiveContainer"
-          class="top-five-container"
-        ></div>
-
-        <button
-          id="saveTopFiveButton"
-          class="save-button"
-          type="button"
-        >
-          Enregistrer mon Top 5
-        </button>
-
-        <p
-          id="topFiveMessage"
-          class="save-message"
-          role="status"
-          aria-live="polite"
-        ></p>
-
+        <p>Classe tes cinq candidats préférés pour ce prime.</p>
+        <div id="topFiveContainer"></div>
+        <button type="button" id="saveTopFiveButton">Enregistrer mon Top 5</button>
+        <p id="topFiveMessage" class="message" role="status" aria-live="polite"></p>
       </div>
 
-
-      <!-- 05 — NOTE FINALE DU PRIME -->
-
-      <div class="subsection final-prime-rating">
-
+      <!-- NOTE GLOBALE DU PRIME -->
+      <div class="subsection">
         <div class="subsection-title">
-
-          <span>05</span>
-
+          <span>🎤</span>
           <div>
-            <p>MON AVIS SUR LE PRIME</p>
-            <h3>Ma note finale du Prime</h3>
+            <p>MON BILAN</p>
+            <h3>Comment était ce prime ?</h3>
           </div>
-
         </div>
 
-        <div class="final-rating-card">
+        <label for="primeFinalRating">Ma note globale sur 10</label>
+        <select id="primeFinalRating">
+          <option value="">Choisir une note</option>
+          <option value="0">0/10</option>
+          <option value="1">1/10</option>
+          <option value="2">2/10</option>
+          <option value="3">3/10</option>
+          <option value="4">4/10</option>
+          <option value="5">5/10</option>
+          <option value="6">6/10</option>
+          <option value="7">7/10</option>
+          <option value="8">8/10</option>
+          <option value="9">9/10</option>
+          <option value="10">10/10</option>
+        </select>
 
-          <div class="final-rating-question">
+        <label for="primeFinalComment">Mon commentaire sur le prime</label>
+        <textarea id="primeFinalComment" rows="4" maxlength="500" placeholder="Mes impressions, mes moments préférés..."></textarea>
 
-            <span>⭐</span>
-
-            <div>
-              <strong>Alors, ce Prime ?</strong>
-              <p>Donne-lui une note sur 10 !</p>
-            </div>
-
-          </div>
-
-          <div class="final-rating-choice">
-
-            <label for="primeFinalRating">Ma note</label>
-
-            <div class="final-rating-input">
-
-              <input
-                type="number"
-                id="primeFinalRating"
-                min="0"
-                max="10"
-                step="1"
-                placeholder="—"
-              >
-
-              <span>/ 10</span>
-
-            </div>
-
-          </div>
-
-          <label for="primeFinalComment" class="visually-hidden">
-            Ton avis sur le Prime
-          </label>
-
-          <textarea
-            id="primeFinalComment"
-            placeholder="Ton avis sur le Prime... 💭"
-            maxlength="500"
-          ></textarea>
-
-          <button
-            id="savePrimeRatingButton"
-            class="save-button"
-            type="button"
-          >
-            Enregistrer ma note du Prime
-          </button>
-
-          <p
-            id="primeRatingMessage"
-            class="save-message"
-            role="status"
-            aria-live="polite"
-          ></p>
-
-        </div>
-
+        <button type="button" id="savePrimeRatingButton">Enregistrer mon bilan</button>
+        <p id="primeRatingMessage" class="message" role="status" aria-live="polite"></p>
       </div>
 
+      <!-- AVIS DES MEMBRES ACCEPTÉS -->
+      <div id="groupResponses" class="subsection hidden">
+        <div class="subsection-title">
+          <span>👥</span>
+          <div>
+            <p>NOTRE GROUPE</p>
+            <h3>Les avis de tout le monde</h3>
+          </div>
+        </div>
+        <p>Retrouve ici les pronostics, les notes et les avis des membres acceptés dans ton groupe.</p>
+        <div id="groupResponsesContent"></div>
+      </div>
     </section>
 
-
-    <!-- ==================================================
-         HISTORIQUE
-         ================================================== -->
-
-    <section id="historique" class="history-section">
-
-      <div class="section-title">
-
-        <p>MON HISTORIQUE</p>
-
-        <h2>Mes Primes</h2>
-
-        <span>
-          Retrouve ce que tu pensais à chaque Prime.
-        </span>
-
+    <!-- HISTORIQUE -->
+    <section id="resultats" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">MES SOUVENIRS</p>
+        <h2>Mes résultats</h2>
+        <p>Retrouve ce que tu avais pensé et pronostiqué au fil des primes.</p>
       </div>
-
-      <div id="myResults" class="my-results">
-
-        <p>
-          Connecte-toi et sélectionne ton espace pour retrouver
-          ton historique.
-        </p>
-
-      </div>
-
+      <div id="myResults"></div>
     </section>
-
   </main>
 
-
-  <!-- ==================================================
-       FOOTER
-       ================================================== -->
-
-  <footer>
-
-    <div class="logo footer-logo">
-      <span>STAR</span>
-      <strong>ACADEMY</strong>
-    </div>
-
-    <p>Notre saison • Nos avis • Nos souvenirs</p>
-
+  <footer class="site-footer">
+    <p>Star Academy 2026</p>
+    <p>Notre saison, nos pronostics, nos souvenirs.</p>
   </footer>
 
-
-  <!-- ==================================================
-       SUPABASE
-       ================================================== -->
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- ==================================================
-       SCRIPT DU SITE
-       ================================================== -->
-
   <script src="script.js"></script>
-
 </body>
 </html>
