@@ -1,706 +1,346 @@
+
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8eaf1">
 
   <title>Star Academy — Notre saison</title>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-<!-- ==================================================
-     HEADER
-     ================================================== -->
-
-<header class="header">
-
-  <div class="logo">
-    <span>STAR</span>
-    <strong>ACADEMY</strong>
-  </div>
-
-
-  <button
-    class="menu-button"
-    id="menuButton"
-    type="button"
-    aria-label="Ouvrir le menu"
-  >
-    ☰
-  </button>
-
-
-  <nav id="nav">
-
-    <a href="#accueil">
-      Accueil
+  <!-- HEADER -->
+  <header class="header">
+    <a class="logo" href="#accueil" aria-label="Accueil Star Academy">
+      <span>STAR</span>
+      <strong>ACADEMY</strong>
     </a>
-
-    <a href="#profils">
-      Profils
-    </a>
-
-    <a href="#candidats">
-      Candidats
-    </a>
-
-    <a href="#primes">
-      Les Primes
-    </a>
-
-    <a href="#historique">
-      Mes résultats
-    </a>
-
-  </nav>
-
-</header>
-
-
-
-<main>
-
-
-<!-- ==================================================
-     ACCUEIL
-     ================================================== -->
-
-<section
-  id="accueil"
-  class="hero"
->
-
-  <div class="hero-content">
-
-    <p class="small-title">
-      SAISON 2026
-    </p>
-
-
-    <h1>
-      Notre saison<br>
-      <span>Star Academy</span>
-    </h1>
-
-
-    <p class="hero-text">
-
-      Nos pronostics, nos avis, nos coups de cœur
-      et tous nos souvenirs de la saison.
-
-    </p>
-
-
-    <a
-      href="#profils"
-      class="main-button"
-    >
-      Commencer
-    </a>
-
-  </div>
-
-</section>
-
-
-
-<!-- ==================================================
-     PROFILS
-     ================================================== -->
-
-<section
-  id="profils"
-  class="player-section"
->
-
-  <div class="section-title">
-
-    <p>
-      QUI ES-TU ?
-    </p>
-
-    <h2>
-      Choisis ton profil
-    </h2>
-
-    <span>
-      Chaque profil possède ses propres avis et pronostics.
-    </span>
-
-  </div>
-
-
-  <div
-    id="players"
-    class="players"
-  ></div>
-
-
-  <button
-    id="addProfileButton"
-    class="add-profile-button"
-    type="button"
-  >
-    + Ajouter un profil
-  </button>
-
-
-  <p
-    id="selectedPlayer"
-    class="selected-player"
-  >
-    Aucun profil sélectionné
-  </p>
-
-</section>
-
-
-
-<!-- ==================================================
-     CANDIDATS
-     ================================================== -->
-
-<section
-  id="candidats"
-  class="candidates-section"
->
-
-  <div class="section-title">
-
-    <p>
-      SAISON 2026
-    </p>
-
-    <h2>
-      Les candidats
-    </h2>
-
-    <span>
-      Ajoutez les candidats de la saison.
-    </span>
-
-  </div>
-
-
-  <div
-    id="candidateList"
-    class="candidate-list"
-  ></div>
-
-
-  <div class="candidate-add">
-
-    <input
-      type="text"
-      id="candidateInput"
-      placeholder="Prénom du candidat"
-      maxlength="40"
-    >
-
 
     <button
-      id="addCandidateButton"
+      class="menu-button"
+      id="menuButton"
       type="button"
-    >
-      Ajouter
-    </button>
+      aria-label="Ouvrir le menu"
+      aria-expanded="false"
+    >☰</button>
 
-  </div>
+    <nav id="nav">
+      <a href="#accueil">Accueil</a>
+      <a href="#profils">Profils</a>
+      <a href="#candidats">Candidats</a>
+      <a href="#primes">Les Primes</a>
+      <a href="#historique">Mes résultats</a>
+    </nav>
+  </header>
 
-</section>
+  <main>
 
+    <!-- ACCUEIL -->
+    <section id="accueil" class="hero">
+      <div class="hero-content">
+        <p class="small-title">SAISON 2026</p>
 
+        <h1>
+          Notre saison<br>
+          <span>Star Academy</span>
+        </h1>
 
-<!-- ==================================================
-     PRIMES
-     ================================================== -->
+        <p class="hero-text">
+          Nos pronostics, nos avis, nos coups de cœur
+          et tous nos souvenirs de la saison.
+        </p>
 
-<section
-  id="primes"
-  class="primes-section"
->
+        <a href="#profils" class="main-button">Commencer</a>
+      </div>
+    </section>
 
-  <div class="section-title">
+    <!-- PROFILS -->
+    <section id="profils" class="player-section">
+      <div class="section-title">
+        <p>QUI ES-TU ?</p>
+        <h2>Choisis ton profil</h2>
+        <span>Chaque profil possède ses propres avis et pronostics.</span>
+      </div>
 
-    <p>
-      STAR ACADEMY
-    </p>
+      <div id="players" class="players"></div>
 
-    <h2>
-      Les Primes
-    </h2>
+      <button
+        id="addProfileButton"
+        class="add-profile-button"
+        type="button"
+      >+ Ajouter un profil</button>
 
-    <span>
-      Choisis un Prime pour noter et donner ton avis.
-    </span>
-
-  </div>
-
-
-  <div
-    id="primeGrid"
-    class="prime-grid"
-  ></div>
-
-</section>
-
-
-
-<!-- ==================================================
-     ESPACE DU PRIME
-     ================================================== -->
-
-<section
-  id="primeSpace"
-  class="prime-space hidden"
->
-
-  <div class="prediction-header">
-
-    <button
-      id="backToPrimes"
-      class="back-button"
-      type="button"
-    >
-      ← Retour aux Primes
-    </button>
-
-
-    <p id="primeNumber">
-      PRIME 1
-    </p>
-
-
-    <h2 id="primeTitle">
-      Mon Prime
-    </h2>
-
-
-    <p id="playerName"></p>
-
-  </div>
-
-
-
-<!-- ==================================================
-     01 — PRONOSTICS
-     ================================================== -->
-
-<div class="subsection">
-
-  <div class="subsection-title">
-
-    <span>
-      01
-    </span>
-
-    <div>
-
-      <p>
-        MES PRONOSTICS
+      <p id="selectedPlayer" class="selected-player">
+        Aucun profil sélectionné
       </p>
+    </section>
 
-      <h3>
-        Qui va se démarquer ?
-      </h3>
-
-    </div>
-
-  </div>
-
-
-  <form id="predictionForm">
-
-    <div class="prediction-grid">
-
-
-      <div class="prediction-card">
-
-        <h4>
-          ⭐ Qui sera immunisé(e) ?
-        </h4>
-
-        <select id="immunity">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
-
+    <!-- CANDIDATS -->
+    <section id="candidats" class="candidates-section">
+      <div class="section-title">
+        <p>SAISON 2026</p>
+        <h2>Les candidats</h2>
+        <span>Ajoutez les candidats de la saison.</span>
       </div>
 
+      <div id="candidateList" class="candidate-list"></div>
 
-      <div class="prediction-card">
+      <div class="candidate-add">
+        <input
+          type="text"
+          id="candidateInput"
+          placeholder="Prénom du candidat"
+          maxlength="40"
+          aria-label="Prénom du candidat"
+        >
 
-        <h4>
-          🎤 Meilleur duo
-        </h4>
+        <button id="addCandidateButton" type="button">Ajouter</button>
+      </div>
+    </section>
 
-        <select id="bestDuo">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
-
+    <!-- PRIMES -->
+    <section id="primes" class="primes-section">
+      <div class="section-title">
+        <p>STAR ACADEMY</p>
+        <h2>Les Primes</h2>
+        <span>Choisis un Prime pour noter et donner ton avis.</span>
       </div>
 
+      <div id="primeGrid" class="prime-grid"></div>
+    </section>
 
-      <div class="prediction-card">
+    <!-- ESPACE DU PRIME -->
+    <section id="primeSpace" class="prime-space hidden">
+      <div class="prediction-header">
+        <button
+          id="backToPrimes"
+          class="back-button"
+          type="button"
+        >← Retour aux Primes</button>
 
-        <h4>
-          💫 Meilleure prestation
-        </h4>
-
-        <select id="bestPerformance">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
-
+        <p id="primeNumber">PRIME 1</p>
+        <h2 id="primeTitle">Mon Prime</h2>
+        <p id="playerName"></p>
       </div>
 
+      <!-- 01 : PRONOSTICS -->
+      <div class="subsection">
+        <div class="subsection-title">
+          <span>01</span>
+          <div>
+            <p>MES PRONOSTICS</p>
+            <h3>Qui va se démarquer ?</h3>
+          </div>
+        </div>
 
-      <div class="prediction-card">
+        <form id="predictionForm">
+          <div class="prediction-grid">
 
-        <h4>
-          ❤️ Ton coup de cœur
-        </h4>
+            <div class="prediction-card">
+              <h4>⭐ Qui sera immunisé(e) ?</h4>
+              <select id="immunity">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
 
-        <select id="favorite">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
+            <div class="prediction-card">
+              <h4>🎤 Meilleur duo</h4>
+              <select id="bestDuo">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
 
+            <div class="prediction-card">
+              <h4>💫 Meilleure prestation</h4>
+              <select id="bestPerformance">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
+
+            <div class="prediction-card">
+              <h4>❤️ Ton coup de cœur</h4>
+              <select id="favorite">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
+
+            <div class="prediction-card" id="eliminatedCard">
+              <h4>🚪 Qui sera éliminé(e) ?</h4>
+              <select id="eliminated">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
+
+            <div class="prediction-card">
+              <h4>🏆 Qui pourrait gagner ?</h4>
+              <select id="winner">
+                <option value="">Choisir...</option>
+              </select>
+            </div>
+
+          </div>
+
+          <button type="submit" class="save-button">
+            Enregistrer mes pronostics
+          </button>
+
+          <p id="saveMessage" class="save-message" aria-live="polite"></p>
+        </form>
       </div>
 
+      <!-- 02 : NOTES DES CANDIDATS -->
+      <div class="subsection">
+        <div class="subsection-title">
+          <span>02</span>
+          <div>
+            <p>MES NOTES</p>
+            <h3>Mon avis sur chaque candidat</h3>
+          </div>
+        </div>
 
-      <div class="prediction-card">
+        <div id="ratingsContainer" class="ratings-container"></div>
 
-        <h4>
-          🚪 Qui sera éliminé(e) ?
-        </h4>
+        <button
+          id="saveRatingsButton"
+          class="save-button"
+          type="button"
+        >Enregistrer mes notes</button>
 
-        <select id="eliminated">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
-
+        <p id="ratingsMessage" class="save-message" aria-live="polite"></p>
       </div>
 
+      <!-- 03 : CATÉGORIES -->
+      <div class="subsection">
+        <div class="subsection-title">
+          <span>03</span>
+          <div>
+            <p>MES CATÉGORIES</p>
+            <h3>Mes impressions du moment</h3>
+          </div>
+        </div>
 
-      <div class="prediction-card">
+        <div id="categoriesContainer" class="categories-container"></div>
 
-        <h4>
-          🏆 Qui pourrait gagner ?
-        </h4>
+        <button
+          id="saveCategoriesButton"
+          class="save-button"
+          type="button"
+        >Enregistrer mes catégories</button>
 
-        <select id="winner">
-          <option value="">
-            Choisir...
-          </option>
-        </select>
-
+        <p id="categoriesMessage" class="save-message" aria-live="polite"></p>
       </div>
 
-
-    </div>
-
-
-    <button
-      type="submit"
-      class="save-button"
-    >
-      Enregistrer mes pronostics
-    </button>
-
-
-    <p
-      id="saveMessage"
-      class="save-message"
-    ></p>
-
-  </form>
-
-</div>
-
-
-
-<!-- ==================================================
-     02 — NOTES
-     ================================================== -->
-
-<div class="subsection">
-
-  <div class="subsection-title">
-
-    <span>
-      02
-    </span>
-
-    <div>
-
-      <p>
-        MES NOTES
-      </p>
-
-      <h3>
-        Mon avis sur chaque candidat
-      </h3>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="ratingsContainer"
-    class="ratings-container"
-  ></div>
-
-
-  <button
-    id="saveRatingsButton"
-    class="save-button"
-    type="button"
-  >
-    Enregistrer mes notes
-  </button>
-
-
-  <p
-    id="ratingsMessage"
-    class="save-message"
-  ></p>
-
-</div>
-
-
-
-<!-- ==================================================
-     03 — CATÉGORIES
-     ================================================== -->
-
-<div class="subsection">
-
-  <div class="subsection-title">
-
-    <span>
-      03
-    </span>
-
-    <div>
-
-      <p>
-        MES CATÉGORIES
-      </p>
-
-      <h3>
-        Mes impressions du moment
-      </h3>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="categoriesContainer"
-    class="categories-container"
-  ></div>
-
-
-  <button
-    id="saveCategoriesButton"
-    class="save-button"
-    type="button"
-  >
-    Enregistrer mes catégories
-  </button>
-
-
-  <p
-    id="categoriesMessage"
-    class="save-message"
-  ></p>
-
-</div>
-
-
-
-<!-- ==================================================
-     04 — TOP 5
-     ================================================== -->
-
-<div class="subsection">
-
-  <div class="subsection-title">
-
-    <span>
-      04
-    </span>
-
-    <div>
-
-      <p>
-        MON TOP 5
-      </p>
-
-      <h3>
-        Mes favoris du moment
-      </h3>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="topFiveContainer"
-    class="top-five-container"
-  ></div>
-
-
-  <button
-    id="saveTopFiveButton"
-    class="save-button"
-    type="button"
-  >
-    Enregistrer mon Top 5
-  </button>
-
-
-  <p
-    id="topFiveMessage"
-    class="save-message"
-  ></p>
-
-</div>
-
-
-
-</section>
-
-
-
-<!-- ==================================================
-     HISTORIQUE
-     ================================================== -->
-
-<section
-  id="historique"
-  class="history-section"
->
-
-  <div class="section-title">
-
-    <p>
-      MON HISTORIQUE
-    </p>
-
-    <h2>
-      Mes Primes
-    </h2>
-
-    <span>
-      Retrouve ce que tu pensais à chaque Prime.
-    </span>
-
-  </div>
-
-
-  <div
-    id="myResults"
-    class="my-results"
-  >
-
-    <p>
-      Sélectionne ton profil pour voir ton historique.
-    </p>
-
-  </div>
-
-</section>
-
-
-</main>
-
-
-
-<!-- ==================================================
-     FOOTER
-     ================================================== -->
-
-<footer>
-
-  <div class="logo footer-logo">
-
-    <span>
-      STAR
-    </span>
-
-    <strong>
-      ACADEMY
-    </strong>
-
-  </div>
-
-
-  <p>
-    Notre saison • Nos avis • Nos souvenirs
-  </p>
-
-</footer>
-
-
-
-<!-- ==================================================
-     SUPABASE
-     ================================================== -->
-
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-
-<!-- ==================================================
-     SCRIPT DU SITE
-     ================================================== -->
-
-<script src="script.js"></script>
-
+      <!-- 04 : TOP 5 -->
+      <div class="subsection">
+        <div class="subsection-title">
+          <span>04</span>
+          <div>
+            <p>MON TOP 5</p>
+            <h3>Mes favoris du moment</h3>
+          </div>
+        </div>
+
+        <div id="topFiveContainer" class="top-five-container"></div>
+
+        <button
+          id="saveTopFiveButton"
+          class="save-button"
+          type="button"
+        >Enregistrer mon Top 5</button>
+
+        <p id="topFiveMessage" class="save-message" aria-live="polite"></p>
+      </div>
+
+      <!-- 05 : AVIS GLOBAL SUR LE PRIME -->
+      <div class="subsection" id="primeFinalSection">
+        <div class="subsection-title">
+          <span>05</span>
+          <div>
+            <p>MON AVIS GÉNÉRAL</p>
+            <h3>Comment était ce Prime ?</h3>
+          </div>
+        </div>
+
+        <div class="prime-final-card">
+          <label for="primeFinalRating">Ma note sur 10</label>
+
+          <select id="primeFinalRating">
+            <option value="">Choisir une note...</option>
+            <option value="1">1/10</option>
+            <option value="2">2/10</option>
+            <option value="3">3/10</option>
+            <option value="4">4/10</option>
+            <option value="5">5/10</option>
+            <option value="6">6/10</option>
+            <option value="7">7/10</option>
+            <option value="8">8/10</option>
+            <option value="9">9/10</option>
+            <option value="10">10/10</option>
+          </select>
+
+          <label for="primeFinalComment">Mon commentaire</label>
+
+          <textarea
+            id="primeFinalComment"
+            maxlength="500"
+            rows="4"
+            placeholder="Ce que j'ai pensé du Prime..."
+          ></textarea>
+
+          <button
+            id="savePrimeRatingButton"
+            class="save-button"
+            type="button"
+          >Enregistrer mon avis sur le Prime</button>
+
+          <p
+            id="primeRatingMessage"
+            class="save-message"
+            aria-live="polite"
+          ></p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- HISTORIQUE -->
+    <section id="historique" class="history-section">
+      <div class="section-title">
+        <p>MON HISTORIQUE</p>
+        <h2>Mes Primes</h2>
+        <span>Retrouve ce que tu pensais à chaque Prime.</span>
+      </div>
+
+      <div id="myResults" class="my-results">
+        <p>Sélectionne ton profil pour voir ton historique.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <a class="logo footer-logo" href="#accueil" aria-label="Retour à l'accueil">
+      <span>STAR</span>
+      <strong>ACADEMY</strong>
+    </a>
+
+    <p>Notre saison • Nos avis • Nos souvenirs</p>
+  </footer>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- SCRIPT DU SITE -->
+  <script src="script.js"></script>
 
 </body>
-
 </html>
