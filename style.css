@@ -829,3 +829,273 @@ footer > p {
     font-size: 11px;
   }
 }
+
+
+/* =========================================
+   STAR ACADEMY — RETOUCHE ÉLÉGANTE
+   À ajouter tout en bas de style.css
+========================================= */
+
+:root {
+  --pink: #e879a7;
+  --pink-dark: #c65383;
+  --pink-light: #f8e5ee;
+  --purple: #8a76ae;
+  --purple-dark: #665184;
+  --purple-light: #eee8f6;
+  --cream: #fffaf5;
+  --paper: #fffdfb;
+  --black: #403449;
+  --grey: #827485;
+  --line: #eadfe8;
+  --shadow: rgba(91, 63, 110, 0.09);
+}
+
+body {
+  background: var(--cream);
+  color: var(--black);
+  letter-spacing: 0.1px;
+}
+
+.header {
+  min-height: 76px;
+  background: rgba(255, 253, 251, 0.94);
+  border-bottom: 1px solid rgba(234, 223, 232, 0.8);
+  box-shadow: 0 4px 20px rgba(91, 63, 110, 0.035);
+}
+
+.logo strong {
+  color: var(--purple-dark);
+}
+
+.hero {
+  background:
+    radial-gradient(ellipse at 8% 20%, rgba(185, 160, 223, 0.25), transparent 34%),
+    radial-gradient(ellipse at 92% 25%, rgba(232, 121, 167, 0.18), transparent 32%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 216, 191, 0.3), transparent 38%),
+    var(--cream);
+}
+
+.hero::before,
+.hero::after {
+  opacity: 0.55;
+}
+
+.hero h1 {
+  line-height: 1.04;
+  letter-spacing: -1.5px;
+}
+
+.hero-text {
+  max-width: 540px;
+  margin-top: 22px;
+  line-height: 1.9;
+}
+
+.main-button,
+.save-button {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d96798, #c65383);
+  box-shadow: 0 5px 14px rgba(198, 83, 131, 0.18);
+}
+
+.main-button:hover,
+.save-button:hover {
+  background: linear-gradient(135deg, #8a76ae, #665184);
+  box-shadow: 0 7px 18px rgba(102, 81, 132, 0.2);
+}
+
+section {
+  padding-top: 82px;
+  padding-bottom: 82px;
+}
+
+.section-title {
+  margin-bottom: 42px;
+}
+
+.section-title h2 {
+  letter-spacing: -0.5px;
+}
+
+.player-section {
+  background: #fffdfb;
+}
+
+.player-card {
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 23px;
+  box-shadow: 0 7px 20px rgba(91, 63, 110, 0.07);
+}
+
+.player-card:hover {
+  box-shadow: 0 12px 25px rgba(91, 63, 110, 0.12);
+}
+
+.player-card.active {
+  border-color: var(--pink-dark);
+  box-shadow: 0 0 0 4px rgba(232, 121, 167, 0.12);
+}
+
+.candidates-section {
+  background:
+    radial-gradient(ellipse at 90% 5%, rgba(255, 255, 255, 0.7), transparent 35%),
+    #f0eaf7;
+}
+
+.candidate-item {
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 5px 16px rgba(91, 63, 110, 0.06);
+}
+
+.candidate-add input,
+input,
+select,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fffdfd;
+  color: var(--black);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--pink);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(232, 121, 167, 0.11);
+}
+
+.primes-section {
+  background: var(--cream);
+}
+
+.prime-card {
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 7px 20px rgba(91, 63, 110, 0.08);
+}
+
+.prime-card:hover {
+  box-shadow: 0 13px 28px rgba(91, 63, 110, 0.13);
+}
+
+.prime-card button {
+  border-radius: 999px;
+  padding: 12px 14px;
+}
+
+.prime-space {
+  background:
+    radial-gradient(ellipse at 95% 3%, rgba(232, 121, 167, 0.16), transparent 32%),
+    radial-gradient(ellipse at 5% 80%, rgba(185, 160, 223, 0.22), transparent 34%),
+    #f8f3fb;
+}
+
+.subsection {
+  padding: 30px;
+  margin-bottom: 48px;
+  border: 1px solid rgba(234, 223, 232, 0.9);
+  border-radius: 23px;
+  background: rgba(255, 253, 251, 0.94);
+  box-shadow: 0 9px 28px rgba(91, 63, 110, 0.055);
+}
+
+.subsection-title {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #f0e6ed;
+}
+
+.subsection-title > span {
+  color: var(--pink-dark);
+}
+
+.subsection-title h3 {
+  color: var(--purple-dark);
+}
+
+.prediction-card,
+.rating-card,
+.rating-item,
+.category-card,
+.category-item,
+.top-five-item,
+.top-five-card {
+  border: 1px solid #eee3eb;
+  border-radius: 16px;
+  background: #fffafc;
+  box-shadow: 0 3px 12px rgba(91, 63, 110, 0.025);
+}
+
+.prediction-card h4 {
+  color: var(--purple-dark);
+}
+
+.back-button {
+  border: 1px solid #e5d6e5;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 3px 10px rgba(91, 63, 110, 0.04);
+}
+
+.history-section {
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(185, 160, 223, 0.15), transparent 35%),
+    #fff4f8;
+}
+
+.result-card,
+.history-card,
+.history-item {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fffdfd;
+  box-shadow: 0 5px 18px rgba(91, 63, 110, 0.05);
+}
+
+footer {
+  background: #fffdfb;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 760px) {
+  section {
+    padding: 58px 5%;
+  }
+
+  .hero {
+    min-height: 480px;
+    padding: 72px 22px;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 10vw, 64px);
+  }
+
+  .subsection {
+    padding: 21px 16px;
+    margin-bottom: 30px;
+    border-radius: 18px;
+  }
+
+  .subsection-title {
+    gap: 12px;
+  }
+
+  .prime-card {
+    min-height: 190px;
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
