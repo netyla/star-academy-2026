@@ -1053,13 +1053,5 @@ async function init() {
 
 init();
 
-/* ACTUALISATION */
-
-setInterval(async () => {
-  await loadPlayers();
-  await loadStudents();
-
-  if (currentPlayer) {
-    await loadMyResults();
-  }
-}, 10000);
+/* ACTUALISATION AUTOMATIQUE DÉSACTIVÉE 
+   Pour ne pas effacer les notes et commentaires en cours de saisie*/
